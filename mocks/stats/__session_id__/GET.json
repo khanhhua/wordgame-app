@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "report": {
+    "der": {
+      "corrects": 10,
+      "wrongs": 2
+    },
+    "die": {
+      "corrects": 20,
+      "wrongs": 23
+    },
+    "das": {
+      "corrects": 10,
+      "wrongs": 31
+    }
+  }
+}

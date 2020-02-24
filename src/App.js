@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import './App.css';
+import './App.scss';
 
 import PlayPage from "./pages/PlayPage";
 import LoginPage from "./pages/LoginPage";
-import MyCollectionListPage from "./pages/MyCollectionListPage";
+import CollectionListPage from "./pages/CollectionListPage";
 import ReportPage from "./pages/ReportPage";
 
 function App() {
@@ -15,14 +15,17 @@ function App() {
           <Route exact path="/login">
             <LoginPage />
           </Route>
+          <Route exact path="/play/:sessionId">
+            <PlayPage />
+          </Route>
           <Route exact path="/play">
             <PlayPage />
           </Route>
           <Route exact path="/report">
             <ReportPage />
           </Route>
-          <Route exact path="/my-collections">
-            <MyCollectionListPage />
+          <Route exact path="/collections">
+            <CollectionListPage />
           </Route>
           <Route>
             <Redirect to="/login" />

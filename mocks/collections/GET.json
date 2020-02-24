@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "collections": [
+    {
+      "id": 1,
+      "title": "Anatomie"
+    },
+    {
+      "id": 2,
+      "title": "Architektur"
+    },
+    {
+      "id": 3,
+      "title": "Astronomie"
+    },
+    {
+      "id": 4,
+      "title": "Automobil"
+    },
+    {
+      "id": 5,
+      "title": "Biochemie"
+    },
+    {
+      "id": 6,
+      "title": "Biologie"
+    },
+    {
+      "id": 7,
+      "title": "Botanik"
+    },
+    {
+      "id": 8,
+      "title": "Chemie"
+    },
+    {
+      "id": 9,
+      "title": "Computer"
+    }
+  ]
+}
