@@ -3,39 +3,39 @@
   "collections": [
     {
       "id": 1,
-      "title": "Anatomie"
+      "name": "Anatomie"
     },
     {
       "id": 2,
-      "title": "Architektur"
+      "name": "Architektur"
     },
     {
       "id": 3,
-      "title": "Astronomie"
+      "name": "Astronomie"
     },
     {
       "id": 4,
-      "title": "Automobil"
+      "name": "Automobil"
     },
     {
       "id": 5,
-      "title": "Biochemie"
+      "name": "Biochemie"
     },
     {
       "id": 6,
-      "title": "Biologie"
+      "name": "Biologie"
     },
     {
       "id": 7,
-      "title": "Botanik"
+      "name": "Botanik"
     },
     {
       "id": 8,
-      "title": "Chemie"
+      "name": "Chemie"
     },
     {
       "id": 9,
-      "title": "Computer"
+      "name": "Computer"
     }
   ]
 }

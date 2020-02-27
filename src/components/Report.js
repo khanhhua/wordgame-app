@@ -22,45 +22,49 @@ export default () => {
     <section className="row">
       <div className="col">
         <h2>Report</h2>
-        <h3>Session Report</h3>
-        <div className="progress-group">
-          <div className="progress-label text-center">
-            DER
+        <div className="card">
+          <div className="card-header">
+            <h3>Session Report</h3>
           </div>
-          <div className="progress mr-0">
-            <div className="progress-bar" role="progressbar"
-                 style={{
-                   width: `${ratios.der * 100}%`,
-                   backgroundColor: '#007bff',
-                 }} />
+          <div className="card-body">
+            <div className="progress-group">
+              <div className="progress-label">
+                DER
+              </div>
+              <div className="progress mr-0">
+                <div className="progress-bar" role="progressbar"
+                     style={{
+                       width: `${ratios.der * 100}%`,
+                       backgroundColor: '#007bff',
+                     }} />
+              </div>
+            </div>
+            <div className="progress-group">
+              <div className="progress-label">
+                DIE
+              </div>
+              <div className="progress mr-0">
+                <div className="progress-bar" role="progressbar"
+                     style={{
+                       width: `${ratios.die * 100}%`,
+                       backgroundColor: '#dc3545',
+                     }} />
+              </div>
+            </div>
+            <div className="progress-group">
+              <div className="progress-label">
+                DAS
+              </div>
+              <div className="progress mr-0">
+                <div className="progress-bar" role="progressbar"
+                     style={{
+                       width: `${ratios.das * 100}%`,
+                       backgroundColor: '#28a745',
+                     }} />
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="progress-group">
-          <div className="progress-label text-center">
-            DIE
-          </div>
-          <div className="progress mr-0">
-            <div className="progress-bar" role="progressbar"
-                 style={{
-                   width: `${ratios.die * 100}%`,
-                   backgroundColor: '#dc3545',
-                 }} />
-          </div>
-        </div>
-        <div className="progress-group">
-          <div className="progress-label text-center">
-            DAS
-          </div>
-          <div className="progress mr-0">
-            <div className="progress-bar" role="progressbar"
-                 style={{
-                   width: `${ratios.das * 100}%`,
-                   backgroundColor: '#28a745',
-                 }} />
-          </div>
-        </div>
-
         <h3>Today Report</h3>
       </div>
     </section>

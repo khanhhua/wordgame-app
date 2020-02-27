@@ -55,12 +55,12 @@ export default (props) => {
 
   const onSuccess = useCallback(async (response) => {
     console.log({ response });
-    const { ok, token } = await network.post('/api/auth', {
+    const { ok, token, profile } = await network.post('/api/auth', {
       tokenId: response.tokenId,
     });
 
     localStorage.setItem('wg:token', token);
-    dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile: response.profileObj });
+    dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile });
     history.replace('/collections'); // TODO Should be redirected to a more personl page
   }, [dispatch]);
 

@@ -22,7 +22,7 @@ module.exports = function (req, res) {
   const { cursor: raw } = req.query;
   let cursor;
   let offset = 0, nextOffset;
-  let word;
+  let term;
   if (raw) {
     cursor = JSON.parse(Buffer.from(raw, 'base64').toString());
     offset = cursor.offset;
@@ -33,11 +33,11 @@ module.exports = function (req, res) {
     };
   }
   nextOffset = offset + 1;
-  word = words[offset];
+  term = words[offset];
 
   res.status(200).json({
     ok: true,
-    word,
+    term,
     hasNext: offset < words.length - 1,
     cursor: Buffer.from(JSON.stringify({
       ...cursor,

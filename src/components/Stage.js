@@ -16,20 +16,21 @@ export default ({ sessionId }) => {
   const fetchNextWord = useCallback(async () => {
     const cursor = state.getIn(['gameSession','cursor']);
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_PENDING });
-    const { ok, word, cursor: newCursor, hasNext, error } = await network.get(`/api/words?cursor=${cursor || ''}`);
+    const { ok, term, cursor: newCursor, has_next: hasNext, error } = await network.get(`/api/words?cursor=${cursor || ''}`);
     if (!ok) {
       dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error });
       return;
     }
-    dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, word, hasNext, cursor: newCursor });
+    dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext, cursor: newCursor });
   }, [dispatch, state]);
 
   const onSelectAnswer = useCallback(async (answer) => {
-    const wordId = state.getIn(['gameSession','word', 'id']);
-    const wordGender = state.getIn(['gameSession','word', 'gender']);
+    const wordId = state.getIn(['gameSession','term', 'id']);
+    const wordTags = state.getIn(['gameSession','term', 'tags']);
     const { ok } = await network.post(`/api/stats`, {
-      wordId,
-      correct: answer === wordGender,
+      session_id: sessionId,
+      term_id: wordId,
+      correct: wordTags.includes(answer),
     });
     if (!ok) {
       return;
@@ -38,33 +39,50 @@ export default ({ sessionId }) => {
     if (state.getIn(['gameSession','hasNext'])) {
       await fetchNextWord();
     } else {
-      const sessionId = state.getIn(['gameSession', 'id']);
-      dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
-      const statsRes = await network.get(`/api/stats/${sessionId}`);
-
-      if (!statsRes.ok) {
-        dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_ERROR, error: statsRes.error });
-        return;
-      }
-
-      dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report: statsRes.report });
+      showReport();
     }
-  }, [dispatch, state.getIn(['gameSession','word'])]);
+  }, [dispatch, state.getIn(['gameSession','term'])]);
 
-  const word = state.getIn(['gameSession','word']);
+  const showReport = useCallback(async () => {
+    const sessionId = state.getIn(['gameSession', 'id']);
+    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
+    const { ok, error, report } = await network.get(`/api/stats/${sessionId}`);
+
+    if (!ok) {
+      dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_ERROR, error });
+      return;
+    }
+
+    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report });
+  }, [dispatch, state.getIn(['gameSession','term'])]);
+
+  const onSkipClick = useCallback(async () => {
+    const wordId = state.getIn(['gameSession','term', 'id']);
+    const { ok } = await network.post(`/api/stats`, {
+      term_id: wordId,
+      skipped: true,
+    });
+    if (!ok) {
+      return;
+    }
+
+    await fetchNextWord();
+  }, [dispatch, state.getIn(['gameSession','term'])]);
+
+  const term = state.getIn(['gameSession','term']);
 
   return (
     <section className="row">
       <div className="col">
         <h2>Play</h2>
-        {!word &&
+        {!term &&
         <p className="text-center">Loading...</p>
         }
-        {!!word &&
+        {!!term &&
         <>
-          <div className="word mt-5 mb-5">
+          <div className="term mt-5 mb-5">
             <div className="text-center display-1">
-              {word.get('text')}
+              {term.get('word')}
             </div>
             <button className="btn btn-sm btn-link">Meaning >></button>
           </div>
@@ -72,15 +90,15 @@ export default ({ sessionId }) => {
           <div className="actions">
             <div className="btn-group w-100">
               <button className="btn btn-light btn-lg"
-                      onClick={() => onSelectAnswer('m')}>
+                      onClick={() => onSelectAnswer('MAS')}>
                 Der
               </button>
               <button className="btn btn-light btn-lg"
-                      onClick={() => onSelectAnswer('f')}>
+                      onClick={() => onSelectAnswer('FEM')}>
                 Die
               </button>
               <button className="btn btn-light btn-lg"
-                      onClick={() => onSelectAnswer('n')}>
+                      onClick={() => onSelectAnswer('NEU')}>
                 Das
               </button>
             </div>
@@ -91,10 +109,16 @@ export default ({ sessionId }) => {
                 Learn
               </button>
               <button className="btn btn-primary btn-sm"
-                      onClick={() => fetchNextWord()}
+                      onClick={() => onSkipClick()}
               >
                 Skip
               </button>
+            </div>
+            <div className="text-center mt-5">
+              <button
+                className="btn btn-light"
+                onClick={() => showReport()}
+              >I'm done for now</button>
             </div>
           </div>
         </>

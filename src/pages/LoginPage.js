@@ -10,13 +10,12 @@ export default (props) => {
   const history = useHistory();
 
   const onSuccess = useCallback(async (response) => {
-    console.log({ response });
-    const { ok, token } = await network.post('/api/auth', {
-      tokenId: response.tokenId,
+    const { ok, token, profile } = await network.post('/api/auth', {
+      access_code: response.code,
     });
 
     localStorage.setItem('wg:token', token);
-    dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile: response.profileObj });
+    dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile });
     history.replace('/collections');
   }, [dispatch]);
 
@@ -31,7 +30,7 @@ export default (props) => {
             clientId={'976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'}
             redirectUri={'http://localhost:3000/auth/google'}
             onSuccess={onSuccess}
-            // responseType={'code'}
+            responseType={'code'}
           />
           <p className="text-muted">
             ...to coup with the insane irregularity in the German language.

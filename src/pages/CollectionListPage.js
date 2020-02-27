@@ -29,7 +29,7 @@ export default (props) => {
   const onReviewClick = async (collectionId) => {
     dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
     const { ok, session, error } = await network.post('/api/session', {
-      collectionId,
+      collection_id: collectionId,
     });
     if (!ok) {
       dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
@@ -52,7 +52,7 @@ export default (props) => {
           <div className="list-group list-group-flush">
             {collections.map(item => (
             <div key={item.get('id')} className="list-group-item">
-              {item.get('title')}
+              {item.get('name')}
               <div className="actions float-right">
                 <div className="btn-group btn-group-sm">
                   <button className="btn btn-sm btn-primary"

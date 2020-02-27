@@ -17,7 +17,7 @@ export const initialState = fromJS({
     id: null,
     status: SESSION_STATUS_PENDING,
     // gameType: 'gender',
-    // word: {
+    // term: {
     //   text: 'Hund',
     // }
   },
@@ -56,7 +56,7 @@ export default (state, { type, status, ...action }) => {
     }
     case ACTION_NEXT_WORD: {
       return state
-          .setIn(['gameSession', 'word'], fromJS(action.word))
+          .setIn(['gameSession', 'term'], fromJS(action.term))
           .setIn(['gameSession', 'cursor'], fromJS(action.cursor))
           .setIn(['gameSession', 'hasNext'], action.hasNext);
     }
