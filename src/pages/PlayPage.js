@@ -53,8 +53,7 @@ export default (props) => {
     })();
   }, []);
 
-  const onSuccess = useCallback(async (response) => {
-    console.log({ response });
+  const onLoginSuccess = useCallback(async (response) => {
     const { ok, token, profile } = await network.post('/api/auth', {
       tokenId: response.tokenId,
     });
@@ -95,7 +94,7 @@ export default (props) => {
             <GoogleLogin
                 clientId={'976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'}
                 redirectUri={'http://localhost:3000/auth/google'}
-                onSuccess={onSuccess}
+                onSuccess={onLoginSuccess}
                 // responseType={'code'}
                 className="mt-5"
             />

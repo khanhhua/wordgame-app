@@ -65,7 +65,11 @@ export default () => {
             </div>
           </div>
         </div>
-        <h3>Today Report</h3>
+        <div className="card mt-4">
+          <div className="card-header">
+            <h3>Today Report</h3>
+          </div>
+        </div>
       </div>
     </section>
   );

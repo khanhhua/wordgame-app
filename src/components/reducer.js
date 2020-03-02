@@ -1,5 +1,6 @@
 import { fromJS } from "immutable";
 import {
+  ACTION_CREATE_COLLECTION,
   ACTION_LIST_COLLECTIONS, ACTION_LOGIN,
   ACTION_NEXT_WORD,
   ACTION_SHOW_REPORT,
@@ -16,10 +17,6 @@ export const initialState = fromJS({
   gameSession: {
     id: null,
     status: SESSION_STATUS_PENDING,
-    // gameType: 'gender',
-    // term: {
-    //   text: 'Hund',
-    // }
   },
   collections: [],
   report: {},
@@ -39,12 +36,18 @@ export default (state, { type, status, ...action }) => {
       return state
           .set('profile', fromJS({
             isLoggedIn: true,
+            defaultCollection: action.defaultCollection,
             ...action.profile,
           }));
     }
     case ACTION_LIST_COLLECTIONS: {
       return state
-          .set('collections', fromJS(action.collections));
+          .set('collections', fromJS(action.collections))
+          .set('myCollections', fromJS(action.myCollections));
+    }
+    case ACTION_CREATE_COLLECTION: {
+      return state
+          .updateIn(['myCollections'], (collections) => collections.unshift(fromJS(action.collection)));
     }
     case ACTION_START_SESSION: {
       return state
@@ -57,7 +60,7 @@ export default (state, { type, status, ...action }) => {
     case ACTION_NEXT_WORD: {
       return state
           .setIn(['gameSession', 'term'], fromJS(action.term))
-          .setIn(['gameSession', 'cursor'], fromJS(action.cursor))
+          .setIn(['gameSession', 'cursor'], action.cursor)
           .setIn(['gameSession', 'hasNext'], action.hasNext);
     }
     case ACTION_SHOW_REPORT: {

@@ -12,3 +12,5 @@ export const ACTION_START_SESSION = 'user/start-session';
 export const ACTION_NEXT_WORD = 'user/next-term';
 export const ACTION_SHOW_REPORT = 'user/show-report';
 export const ACTION_LIST_COLLECTIONS = 'user/list-collections';
+export const ACTION_ADD_TO_COLLECTION = 'user/add-to-collections';
+export const ACTION_CREATE_COLLECTION = 'user/create-collection';

@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "collections": [
+    {
+      "id": 9000,
+      "name": "Default"
+    },
+    {
+      "id": 9001,
+      "name": "My Anatomie"
+    },
+    {
+      "id": 9002,
+      "name": "My Architektur"
+    },
+    {
+      "id": 9003,
+      "name": "My Astronomie"
+    },
+    {
+      "id": 9004,
+      "name": "My Automobil"
+    }
+  ]
+}

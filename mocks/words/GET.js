@@ -1,20 +1,20 @@
 const fs = require('fs');
 
-const words = [
+const terms = [
   {
     id: 1,
-    text: 'Hund, der',
-    gender: 'm',
+    word: 'Hund',
+    tags: 'SUB:NOM:SIN:MAS',
   },
   {
     id: 2,
-    text: 'Katze, die',
-    gender: 'f',
+    word: 'Katze',
+    tags: 'SUB:NOM:SIN:FEM',
   },
   {
     id: 3,
-    text: 'Buch, das',
-    gender: 'n',
+    word: 'Buch, das',
+    tags: 'SUB:NOM:SIN:NEU',
   }
 ];
 
@@ -29,16 +29,16 @@ module.exports = function (req, res) {
   } else {
     offset = 0;
     cursor = {
-      collectionId: '*'
+      collection_id: '*'
     };
   }
   nextOffset = offset + 1;
-  term = words[offset];
+  term = terms[offset];
 
   res.status(200).json({
     ok: true,
     term,
-    hasNext: offset < words.length - 1,
+    has_next: offset < terms.length - 1,
     cursor: Buffer.from(JSON.stringify({
       ...cursor,
       offset: nextOffset

@@ -1,7 +1,14 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { DispatchContext, StateContext } from "../components/context";
 import network from "../components/network";
-import { ACTION_NEXT_WORD, ACTION_SHOW_REPORT, STATUS_ERROR, STATUS_OK, STATUS_PENDING } from "../components/constants";
+import {
+  ACTION_NEXT_WORD,
+  ACTION_SHOW_REPORT,
+  ACTION_ADD_TO_COLLECTION,
+  STATUS_ERROR,
+  STATUS_OK,
+  STATUS_PENDING,
+} from "../components/constants";
 
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
@@ -69,6 +76,27 @@ export default ({ sessionId }) => {
     await fetchNextWord();
   }, [dispatch, state.getIn(['gameSession','term'])]);
 
+  const onLearnClick = useCallback(async () => {
+    const term = state.getIn(['gameSession','term']);
+    const defaultCollectionId = state.getIn(['profile', 'defaultCollection', 'id']);
+
+    dispatch({ type: ACTION_ADD_TO_COLLECTION, status: STATUS_PENDING });
+    const { ok, collection, error } = await network.post(`/api/me/collections/${defaultCollectionId}/terms`, {
+      term_id: term.get('id'),
+    });
+    if (!ok) {
+      dispatch({ type: ACTION_ADD_TO_COLLECTION, status: STATUS_ERROR, error });
+      return;
+    }
+
+    dispatch({ type: ACTION_ADD_TO_COLLECTION, status: STATUS_OK, collection });
+    if (state.getIn(['gameSession','hasNext'])) {
+      await fetchNextWord();
+    } else {
+      showReport();
+    }
+  }, [dispatch, state.getIn(['gameSession', 'term']), state.getIn(['gameSession', 'hasNext'])]);
+
   const term = state.getIn(['gameSession','term']);
 
   return (
@@ -104,12 +132,12 @@ export default ({ sessionId }) => {
             </div>
             <div className="btn-group w-100 mt-5">
               <button className="btn btn-light btn-sm"
-                      onClick={() => null}
+                      onClick={onLearnClick}
               >
                 Learn
               </button>
               <button className="btn btn-primary btn-sm"
-                      onClick={() => onSkipClick()}
+                      onClick={onSkipClick}
               >
                 Skip
               </button>
@@ -117,7 +145,7 @@ export default ({ sessionId }) => {
             <div className="text-center mt-5">
               <button
                 className="btn btn-light"
-                onClick={() => showReport()}
+                onClick={showReport}
               >I'm done for now</button>
             </div>
           </div>

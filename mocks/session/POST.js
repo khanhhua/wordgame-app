@@ -2,15 +2,16 @@ const fs = require('fs');
 
 module.exports = function (req, res) {
   const sessionId = Date.now();
-  const { collectionId } = req.body;
+  const { category_id, collection_id } = req.body;
 
   const cursor = Buffer.from(JSON.stringify({
-    collectionId,
+    category_id,
+    collection_id,
     offset: 0,
   })).toString('base64');
   const session = {
     id: sessionId,
-    gameType: 'gender',
+    game_type: 'gender',
     cursor,
   };
   fs.writeFileSync(__dirname + '/.session', JSON.stringify(session));
