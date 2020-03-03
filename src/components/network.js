@@ -66,5 +66,9 @@ export default {
   async patch(uri, payload) {
     const res = await request(`${BASE_URL}${uri}`, 'PATCH', JSON.stringify(payload));
     return handleResponse(res);
+  },
+  async delete(uri) {
+    const res = await request(`${BASE_URL}${uri}`, 'DELETE');
+    return handleResponse(res);
   }
 }

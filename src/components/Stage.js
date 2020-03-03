@@ -52,6 +52,8 @@ export default ({ sessionId }) => {
 
   const showReport = useCallback(async () => {
     const sessionId = state.getIn(['gameSession', 'id']);
+    await network.delete(`/api/session`);
+
     dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
     const { ok, error, report } = await network.get(`/api/stats/${sessionId}`);
 
