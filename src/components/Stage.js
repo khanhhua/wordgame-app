@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { DispatchContext, StateContext } from "../components/context";
 import network from "../components/network";
 import {
@@ -13,6 +14,9 @@ import {
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+  const [showingAnswer, setShowingAnswer] = useState(null);
+
+  const [timestamp, setTimestamp] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -29,26 +33,28 @@ export default ({ sessionId }) => {
       return;
     }
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext, cursor: newCursor });
+    setTimestamp(Date.now() / 1000);
   }, [dispatch, state]);
 
   const onSelectAnswer = useCallback(async (answer) => {
     const wordId = state.getIn(['gameSession','term', 'id']);
     const wordTags = state.getIn(['gameSession','term', 'tags']);
+    const correct = wordTags.includes(answer);
     const { ok } = await network.post(`/api/stats`, {
       session_id: sessionId,
       term_id: wordId,
-      correct: wordTags.includes(answer),
+      correct,
+      seconds: (Date.now() / 1000) - timestamp,
     });
     if (!ok) {
       return;
     }
 
-    if (state.getIn(['gameSession','hasNext'])) {
-      await fetchNextWord();
-    } else {
-      showReport();
-    }
-  }, [dispatch, state.getIn(['gameSession','term'])]);
+    setShowingAnswer({
+      correct,
+      article: wordTags.includes('MAS') ? 'der' : wordTags.includes('FEM') ? 'die' : 'das',
+    });
+  }, [dispatch, timestamp, state.getIn(['gameSession','term'])]);
 
   const showReport = useCallback(async () => {
     const sessionId = state.getIn(['gameSession', 'id']);
@@ -99,35 +105,47 @@ export default ({ sessionId }) => {
     }
   }, [dispatch, state.getIn(['gameSession', 'term']), state.getIn(['gameSession', 'hasNext'])]);
 
+  const onNextClick = useCallback(async () => {
+    setShowingAnswer(null);
+    if (state.getIn(['gameSession','hasNext'])) {
+      await fetchNextWord();
+    } else {
+      showReport();
+    }
+  }, [dispatch, state.getIn(['gameSession', 'term']), state.getIn(['gameSession', 'hasNext'])]);
+
   const term = state.getIn(['gameSession','term']);
 
   return (
     <section className="row">
       <div className="col">
-        <h2>Play</h2>
+        <h2 className="text-center text-black-50">Play</h2>
         {!term &&
         <p className="text-center">Loading...</p>
         }
         {!!term &&
         <>
           <div className="term mt-5 mb-5">
-            <div className="text-center display-1">
+            <div className="text-center display-2 text-break">
               {term.get('word')}
             </div>
             <button className="btn btn-sm btn-link">Meaning >></button>
           </div>
 
-          <div className="actions">
-            <div className="btn-group w-100">
-              <button className="btn btn-light btn-lg"
+          <div className="actions text-center">
+            <div className="btn-group w-75">
+              <button className="btn btn-light btn-lg text-white btn-circle"
+                      style={{ backgroundColor: 'rgb(32,59,129)' }}
                       onClick={() => onSelectAnswer('MAS')}>
                 Der
               </button>
-              <button className="btn btn-light btn-lg"
+              <button className="btn btn-light btn-lg text-white btn-circle"
+                      style={{ backgroundColor: 'rgb(207,25,14)' }}
                       onClick={() => onSelectAnswer('FEM')}>
                 Die
               </button>
-              <button className="btn btn-light btn-lg"
+              <button className="btn btn-light btn-lg text-white btn-circle"
+                      style={{ backgroundColor: 'rgb(84,159,14)' }}
                       onClick={() => onSelectAnswer('NEU')}>
                 Das
               </button>
@@ -154,6 +172,23 @@ export default ({ sessionId }) => {
         </>
         }
       </div>
+      {!!showingAnswer &&
+      <Modal isOpen={true}>
+        <ModalBody>
+          <div className="display-2 text-center" style={{ wordBreak: 'break-word' }}>
+            <span className="font-weight-lighter text-muted">{term.get('word')}</span>, <br/>
+            <span className="font-weight-bold">{showingAnswer.article}</span>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="success"
+            onClick={onNextClick}
+            className="mx-auto"
+          >Next</Button>
+        </ModalFooter>
+      </Modal>
+      }
     </section>
   );
 };

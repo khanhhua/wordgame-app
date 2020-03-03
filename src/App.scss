@@ -9,3 +9,20 @@
     font-weight: 700;
   }
 }
+
+.btn.btn-circle {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 50% !important;
+
+  &:before {
+    content: "";
+    display: block;
+    padding-bottom: 50%;
+  }
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 50%;
+  }
+}
