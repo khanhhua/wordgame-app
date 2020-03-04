@@ -1,5 +1,17 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  FormGroup,
+  Label,
+  Button,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import { DispatchContext, StateContext } from "../components/context";
 import network from "../components/network";
 import {
@@ -9,12 +21,62 @@ import {
   STATUS_ERROR,
   STATUS_OK,
   STATUS_PENDING,
-} from "../components/constants";
+  ACTION_LIST_COLLECTIONS,
+} from '../components/constants';
+
+const AddToCollectionModal = ({ term, addToCollection }) => {
+  const dispatch = useContext(DispatchContext);
+  const state = useContext(StateContext);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const type = ACTION_LIST_COLLECTIONS;
+      const { ok, collections, error } = await network.get('/api/me/collections');
+
+      if (!ok) {
+        dispatch({ type, status: STATUS_ERROR, error });
+        return;
+      }
+      dispatch({ type, status: STATUS_OK, collections });
+    })();
+  }, [dispatch]);
+
+  return (
+    <Modal isOpen={true}>
+      <ModalHeader>Add "{term.get('word')}" to collection...</ModalHeader>
+      <ModalBody>
+        <FormGroup row>
+          <Label className="col-form-label col-2">Collection</Label>
+          <div className="col-10">
+            <Dropdown
+              isOpen={isOpen}
+              toggle={() => setIsOpen(!isOpen)}
+            >
+              <DropdownToggle caret className="bg-transparent text-black-50 w-100">Choose a collection...</DropdownToggle>
+              <DropdownMenu className="w-100">
+              {state.get('collections').map(item => (
+                <DropdownItem
+                  key={item.get('id')}
+                  onClick={() => addToCollection(item.get('id'))}
+                >
+                  {item.get('name')}
+                </DropdownItem>
+              ))}
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </FormGroup>
+      </ModalBody>
+    </Modal>
+  );
+};
 
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
   const [showingAnswer, setShowingAnswer] = useState(null);
+  const [showingAddToCollectionModal, setShowingAddToCollectionModal] = useState(false);
 
   const [timestamp, setTimestamp] = useState(null);
 
@@ -23,6 +85,9 @@ export default ({ sessionId }) => {
       await fetchNextWord();
     })();
   }, [sessionId]);
+  useEffect(() => {
+    setShowingAddToCollectionModal(false);
+  }, [state.getIn(['gameSession','term'])]);
 
   const fetchNextWord = useCallback(async () => {
     const cursor = state.getIn(['gameSession','cursor']);
@@ -84,12 +149,10 @@ export default ({ sessionId }) => {
     await fetchNextWord();
   }, [dispatch, state.getIn(['gameSession','term'])]);
 
-  const onLearnClick = useCallback(async () => {
+  const addToCollection = useCallback(async (collectionId) => {
     const term = state.getIn(['gameSession','term']);
-    const defaultCollectionId = state.getIn(['profile', 'defaultCollection', 'id']);
-
     dispatch({ type: ACTION_ADD_TO_COLLECTION, status: STATUS_PENDING });
-    const { ok, collection, error } = await network.post(`/api/me/collections/${defaultCollectionId}/terms`, {
+    const { ok, collection, error } = await network.post(`/api/me/collections/${collectionId}/terms`, {
       term_id: term.get('id'),
     });
     if (!ok) {
@@ -134,25 +197,22 @@ export default ({ sessionId }) => {
 
           <div className="actions text-center">
             <div className="btn-group w-75">
-              <button className="btn btn-light btn-lg text-white btn-circle"
-                      style={{ backgroundColor: 'rgb(32,59,129)' }}
+              <button className="btn btn-light btn-lg text-white btn-circle bg-masculine"
                       onClick={() => onSelectAnswer('MAS')}>
                 Der
               </button>
-              <button className="btn btn-light btn-lg text-white btn-circle"
-                      style={{ backgroundColor: 'rgb(207,25,14)' }}
+              <button className="btn btn-light btn-lg text-white btn-circle bg-feminine"
                       onClick={() => onSelectAnswer('FEM')}>
                 Die
               </button>
-              <button className="btn btn-light btn-lg text-white btn-circle"
-                      style={{ backgroundColor: 'rgb(84,159,14)' }}
+              <button className="btn btn-light btn-lg text-white btn-circle bg-neuter"
                       onClick={() => onSelectAnswer('NEU')}>
                 Das
               </button>
             </div>
             <div className="btn-group w-100 mt-5">
               <button className="btn btn-light btn-sm"
-                      onClick={onLearnClick}
+                      onClick={() => setShowingAddToCollectionModal(true)}
               >
                 Learn
               </button>
@@ -188,6 +248,12 @@ export default ({ sessionId }) => {
           >Next</Button>
         </ModalFooter>
       </Modal>
+      }
+      {!!showingAddToCollectionModal &&
+      <AddToCollectionModal
+        term={term}
+        addToCollection={addToCollection}
+      />
       }
     </section>
   );

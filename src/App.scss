@@ -1,3 +1,7 @@
+$COLOR_MAS: rgb(32,59,129);
+$COLOR_FEM: rgb(207,25,14);
+$COLOR_NEU: rgb(84,159,14);
+
 .actions {
 
 }
@@ -25,4 +29,16 @@
     display: block;
     padding-bottom: 50%;
   }
+}
+
+.bg-masculine {
+  background-color: $COLOR_MAS;
+}
+
+.bg-feminine {
+  background-color: $COLOR_FEM;
+}
+
+.bg-neuter {
+  background-color: $COLOR_NEU;
 }

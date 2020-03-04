@@ -7,7 +7,6 @@ export const SESSION_STATUS_PLAYING = 'playing';
 export const SESSION_STATUS_DONE = 'done';
 
 export const ACTION_LOGIN = 'user/login';
-export const ACTION_FETCH_COLLECTIONS = 'user/fetch-collections';
 export const ACTION_START_SESSION = 'user/start-session';
 export const ACTION_NEXT_WORD = 'user/next-term';
 export const ACTION_SHOW_REPORT = 'user/show-report';

@@ -4,8 +4,6 @@ import { DispatchContext, StateContext } from "../components/context";
 import network from "../components/network";
 import {
   ACTION_LOGIN,
-  ACTION_NEXT_WORD,
-  ACTION_SHOW_REPORT,
   ACTION_START_SESSION, SESSION_STATUS_DONE, SESSION_STATUS_PLAYING,
   STATUS_ERROR,
   STATUS_OK,

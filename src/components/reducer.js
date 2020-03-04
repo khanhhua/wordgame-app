@@ -24,6 +24,11 @@ export const initialState = fromJS({
 
 export default (state, { type, status, ...action }) => {
   if (status === STATUS_ERROR) {
+    if (action.error && action.error === 'Invalid token') {
+      return state.set('profile', fromJS({
+        isLoggedIn: false,
+      }));
+    }
     return state;
   }
   if (status === STATUS_PENDING) {
