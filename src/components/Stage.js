@@ -126,14 +126,27 @@ export default ({ sessionId }) => {
     await network.delete(`/api/session`);
 
     dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
-    const { ok, error, report } = await network.get(`/api/stats/${sessionId}`);
+    const { ok, error, sessionReport, weeklyReport } = await Promise.all([
+      network.get(`/api/stats/${sessionId}`),
+      network.get('/api/stats?reports=weekly'),
+    ]).then(([ sessionReport, weeklyReport ]) => ({
+      ok: sessionReport.ok || weeklyReport.ok,
+      sessionReport: sessionReport.report,
+      weeklyReport: weeklyReport.report,
+    })).catch(error => ({
+      ok: false,
+      error,
+    }));
 
     if (!ok) {
       dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_ERROR, error });
       return;
     }
 
-    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report });
+    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report: {
+      session: sessionReport,
+      ...weeklyReport,
+      } });
   }, [dispatch, state.getIn(['gameSession','term'])]);
 
   const onSkipClick = useCallback(async () => {

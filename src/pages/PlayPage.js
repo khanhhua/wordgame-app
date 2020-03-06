@@ -84,7 +84,7 @@ export default (props) => {
       <Report sessionId={session.get('id')} />
       }
       {!!(session && session.get('id') && session.get('status') === SESSION_STATUS_DONE) &&
-      <session className="row">
+      <section className="row">
         <div className="col">
           <Link className="btn btn-sm btn-link btn-block" to="/collections">Back to collections</Link>
           {!state.getIn(['profile', 'isLoggedIn']) &&
@@ -102,7 +102,7 @@ export default (props) => {
           </>
           }
         </div>
-      </session>
+      </section>
       }
     </div>
   );

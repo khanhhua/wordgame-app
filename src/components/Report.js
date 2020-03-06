@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { DispatchContext, StateContext } from "./context";
-import { Link } from "react-router-dom";
-import GoogleLogin from "react-google-login";
+import LineChartWeeklyPerformance from "./LineChartWeeklyPerformance";
 
 /**
  * Post-session report
@@ -11,11 +10,13 @@ export default () => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
 
-  const report = state.get('report');
-  const ratios = {
-    der: report.getIn(['der', 'corrects']) / (report.getIn(['der', 'corrects']) + report.getIn(['der', 'wrongs'])),
-    die: report.getIn(['die', 'corrects']) / (report.getIn(['die', 'corrects']) + report.getIn(['die', 'wrongs'])),
-    das: report.getIn(['das', 'corrects']) / (report.getIn(['das', 'corrects']) + report.getIn(['das', 'wrongs'])),
+  const session = state.getIn(['report', 'session']);
+  const weeklyPerformance = state.getIn(['report', 'weekly_performance']);
+
+  const sessionRatios = {
+    der: session.getIn(['der', 'corrects']) / (session.getIn(['der', 'corrects']) + session.getIn(['der', 'wrongs'])),
+    die: session.getIn(['die', 'corrects']) / (session.getIn(['die', 'corrects']) + session.getIn(['die', 'wrongs'])),
+    das: session.getIn(['das', 'corrects']) / (session.getIn(['das', 'corrects']) + session.getIn(['das', 'wrongs'])),
   };
 
   return (
@@ -32,10 +33,9 @@ export default () => {
                 DER
               </div>
               <div className="progress mr-0">
-                <div className="progress-bar" role="progressbar"
+                <div className="progress-bar bg-masculine" role="progressbar"
                      style={{
-                       width: `${ratios.der * 100}%`,
-                       backgroundColor: '#007bff',
+                       width: `${sessionRatios.der * 100}%`,
                      }} />
               </div>
             </div>
@@ -44,10 +44,9 @@ export default () => {
                 DIE
               </div>
               <div className="progress mr-0">
-                <div className="progress-bar" role="progressbar"
+                <div className="progress-bar bg-feminine" role="progressbar"
                      style={{
-                       width: `${ratios.die * 100}%`,
-                       backgroundColor: '#dc3545',
+                       width: `${sessionRatios.die * 100}%`,
                      }} />
               </div>
             </div>
@@ -56,10 +55,9 @@ export default () => {
                 DAS
               </div>
               <div className="progress mr-0">
-                <div className="progress-bar" role="progressbar"
+                <div className="progress-bar bg-neuter" role="progressbar"
                      style={{
-                       width: `${ratios.das * 100}%`,
-                       backgroundColor: '#28a745',
+                       width: `${sessionRatios.das * 100}%`,
                      }} />
               </div>
             </div>
@@ -67,7 +65,10 @@ export default () => {
         </div>
         <div className="card mt-4">
           <div className="card-header">
-            <h3>Today Report</h3>
+            <h3 className="mb-0">Weekly Report</h3>
+          </div>
+          <div className="card-body">
+            <LineChartWeeklyPerformance weeklyPerformance={weeklyPerformance.toJS()} />
           </div>
         </div>
       </div>
