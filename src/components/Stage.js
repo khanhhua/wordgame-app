@@ -23,6 +23,7 @@ import {
   STATUS_PENDING,
   ACTION_LIST_COLLECTIONS,
 } from '../components/constants';
+import Loader from "./Loader";
 
 const AddToCollectionModal = ({ term, addToCollection }) => {
   const dispatch = useContext(DispatchContext);
@@ -75,6 +76,8 @@ const AddToCollectionModal = ({ term, addToCollection }) => {
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+
+  const [status, setStatus] = useState({ busy: false, error: null });
   const [showingAnswer, setShowingAnswer] = useState(null);
   const [showingAddToCollectionModal, setShowingAddToCollectionModal] = useState(false);
 
@@ -122,6 +125,8 @@ export default ({ sessionId }) => {
   }, [dispatch, timestamp, state.getIn(['gameSession','term'])]);
 
   const showReport = useCallback(async () => {
+    setStatus({ busy: true });
+
     const sessionId = state.getIn(['gameSession', 'id']);
     await network.delete(`/api/session`);
 
@@ -143,6 +148,7 @@ export default ({ sessionId }) => {
       return;
     }
 
+    setStatus({ busy: false });
     dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report: {
       session: sessionReport,
       ...weeklyReport,
@@ -267,6 +273,9 @@ export default ({ sessionId }) => {
         term={term}
         addToCollection={addToCollection}
       />
+      }
+      {!!status.busy &&
+      <Loader />
       }
     </section>
   );

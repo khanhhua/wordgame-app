@@ -48,16 +48,16 @@ export default ({ weeklyPerformance }) => {
         ]
       }}
       width={100}
-      height={400}
+      height={40}
       options={{
         scales: {
-          yAxes: [{ ticks: { max: 100, min: 0, stepSize: 10 } }],
+          yAxes: [{ ticks: { max: 100, min: 0, stepSize: 20 } }],
         },
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         layout: {
           padding: 0,
         }
       }}
     />
   );
-}
+};
