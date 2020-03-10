@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { HashRouter as Router, Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import './App.scss';
 
 import PlayPage from "./pages/PlayPage";

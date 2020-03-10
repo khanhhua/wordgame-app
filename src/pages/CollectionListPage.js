@@ -51,7 +51,7 @@ export default (props) => {
         myCollections,
       });
     })();
-  }, []);
+  }, [dispatch]);
 
   const onReviewClick = async (collection) => {
     dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });

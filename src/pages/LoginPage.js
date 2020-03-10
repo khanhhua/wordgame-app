@@ -10,14 +10,14 @@ export default (props) => {
   const history = useHistory();
 
   const onSuccess = useCallback(async (response) => {
-    const { ok, token, profile, default_collection: defaultCollection } = await network.post('/api/auth', {
+    const { token, profile, default_collection: defaultCollection } = await network.post('/api/auth', {
       access_code: response.code,
     });
 
     localStorage.setItem('wg:token', token);
     dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile, defaultCollection });
     history.replace('/collections');
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   return (
     <div className="container login-page">

@@ -49,17 +49,17 @@ export default (props) => {
         }
       }
     })();
-  }, []);
+  }, [dispatch, pathParams.sessionId]);
 
   const onLoginSuccess = useCallback(async (response) => {
-    const { ok, token, profile } = await network.post('/api/auth', {
+    const { token, profile } = await network.post('/api/auth', {
       tokenId: response.tokenId,
     });
 
     localStorage.setItem('wg:token', token);
     dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile });
     history.replace('/collections'); // TODO Should be redirected to a more personl page
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   const session = state.getIn(['gameSession']);
 

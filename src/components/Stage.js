@@ -83,15 +83,6 @@ export default ({ sessionId }) => {
 
   const [timestamp, setTimestamp] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      await fetchNextWord();
-    })();
-  }, [sessionId]);
-  useEffect(() => {
-    setShowingAddToCollectionModal(false);
-  }, [state.getIn(['gameSession','term'])]);
-
   const fetchNextWord = useCallback(async () => {
     const cursor = state.getIn(['gameSession','cursor']);
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_PENDING });
@@ -195,6 +186,15 @@ export default ({ sessionId }) => {
       showReport();
     }
   }, [dispatch, state.getIn(['gameSession', 'term']), state.getIn(['gameSession', 'hasNext'])]);
+
+  useEffect(() => {
+    (async () => {
+      await fetchNextWord();
+    })();
+  }, []);
+  useEffect(() => {
+    setShowingAddToCollectionModal(false);
+  }, [state.getIn(['gameSession','term'])]);
 
   const term = state.getIn(['gameSession','term']);
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import { Navbar, Nav, NavbarBrand, NavItem } from 'reactstrap';
 import { NavLink } from "react-router-dom";
 

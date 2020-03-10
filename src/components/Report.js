@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { DispatchContext, StateContext } from "./context";
+import { StateContext } from "./context";
 import LineChartWeeklyPerformance from "./LineChartWeeklyPerformance";
 
 /**
@@ -7,7 +7,6 @@ import LineChartWeeklyPerformance from "./LineChartWeeklyPerformance";
  * @returns {*}
  */
 export default () => {
-  const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
 
   const session = state.getIn(['report', 'session']);

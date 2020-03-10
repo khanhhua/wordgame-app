@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
 const defaultLineDataSeriesOptions = {
   backgroundColor: 'rgba(63,69,192,0.4)',
