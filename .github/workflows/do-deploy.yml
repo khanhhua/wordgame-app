@@ -32,3 +32,4 @@ jobs:
       with:
         source: "build/*"
         target: "/home/webuser/wordgame-app"
+        strip_components: 1 
