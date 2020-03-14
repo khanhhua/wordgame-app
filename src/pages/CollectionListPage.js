@@ -3,9 +3,10 @@ import { useHistory } from 'react-router-dom';
 import {
   Button,
   Modal, ModalHeader, ModalBody, ModalFooter,
+  ListGroup, ListGroupItem,
   Form, FormGroup, Label, Input,
 } from 'reactstrap';
-import network from "../components/network";
+import network, { debounce } from "../components/network";
 import { DispatchContext, StateContext } from "../components/context";
 import {
   ACTION_LIST_COLLECTIONS,
@@ -13,7 +14,7 @@ import {
   ACTION_CREATE_COLLECTION,
   STATUS_ERROR,
   STATUS_OK,
-  STATUS_PENDING,
+  STATUS_PENDING, ACTION_ADD_TO_COLLECTION,
 } from "../components/constants";
 import CollectionList from "../components/CollectionList";
 
@@ -81,6 +82,10 @@ export default (props) => {
     setNewCollection({ visible: false });
   }, [dispatch, newCollectionNameRef]);
 
+  const onEditClick = useCallback(async (collection) => {
+    history.push(`/collections/${collection.get('id')}`);
+  }, [history]);
+
   const collections = state.get('collections');
   const myCollections = state.get('myCollections');
 
@@ -97,7 +102,11 @@ export default (props) => {
               >Add</button>
               <h2>My Learning List</h2>
             </div>
-            <CollectionList collections={myCollections} onReviewClick={onReviewClick} />
+            <CollectionList
+              onEditClick={onEditClick}
+              collections={myCollections}
+              onReviewClick={onReviewClick}
+            />
           </>
           }
           {!(collections && collections.size) &&

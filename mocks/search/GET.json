@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "terms": [
+    {
+      "id": 1,
+      "word": "Atomspaltung"
+    },
+    {
+      "id": 2,
+      "word": "Kernspaltung"
+    },
+    {
+      "id": 3,
+      "word": "Fission"
+    },
+    {
+      "id": 4,
+      "word": "Wiederaufnahme"
+    },
+    {
+      "id": 5,
+      "word": "Fortführung"
+    }
+  ]
+}
