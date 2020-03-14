@@ -1,3 +1,4 @@
+import { default as _debounce } from 'lodash.debounce';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 const prefix = 'wg'; // wordgame
 
@@ -18,7 +19,7 @@ const request = async (url, method, body=null) => {
     headers['Authorization'] = `Bearer ${token}`;
   }
   // Normalize reponse to { ok, error }
-  return fetch(url, method === 'get' ? { headers, method } : {
+  return fetch(url, method === 'GET' || method === 'DELETE' ? { headers, method } : {
     headers,
     method,
     body,
@@ -50,7 +51,7 @@ const handleResponse = async res => {
   }
 };
 
-export default {
+const api = {
   async get(uri) {
     const res = await request(`${BASE_URL}${uri}`, 'GET');
     return handleResponse(res);
@@ -71,4 +72,17 @@ export default {
     const res = await request(`${BASE_URL}${uri}`, 'DELETE');
     return handleResponse(res);
   }
-}
+};
+
+export const debounce = (s) => {
+  const proxy = {};
+  Object.keys(api).forEach(key => {
+    Object.defineProperty(proxy, key,{
+      value: _debounce(api[key], s * 1000),
+    });
+  });
+
+  return proxy;
+};
+
+export default api;

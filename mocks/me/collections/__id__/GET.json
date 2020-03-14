@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "collection": {
+    "id": 9001,
+    "name": "My Anatomie",
+    "terms": [
+      {
+        "id": 1,
+        "word": "Ampel"
+      },
+      {
+        "id": 2,
+        "word": "Sessel"
+      },
+      {
+        "id": 3,
+        "word": "Kreuz"
+      }
+    ]
+  }
+}

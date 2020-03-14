@@ -10,6 +10,7 @@ import AppNav from "./components/AppNav";
 import { DispatchContext, StateContext } from "./components/context";
 import network from "./components/network";
 import { ACTION_LOGIN, STATUS_OK } from "./components/constants";
+import EditCollectionModal from "./components/EditCollectionModal";
 
 function App() {
   const dispatch = useContext(DispatchContext);
@@ -54,9 +55,12 @@ function App() {
             <AppNav />
             <ReportPage />
           </Route>
-          <Route exact path="/collections">
+          <Route path="/collections">
             <AppNav />
             <CollectionListPage />
+            <Route path="/collections/:collectionId">
+              <EditCollectionModal />
+            </Route>
           </Route>
           <Route>
             <Redirect to="/login" />

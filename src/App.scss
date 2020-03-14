@@ -44,6 +44,10 @@ $COLOR_NEU: rgb(84,159,14);
 }
 
 .loader {
+  &.loader-dark {
+    color: #212529;
+  }
+
   color: white;
   font-size: 20px;
   margin: 100px auto;
