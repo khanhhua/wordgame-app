@@ -109,10 +109,12 @@ export default ({ sessionId }) => {
       return;
     }
 
-    setShowingAnswer({
-      correct,
-      article: wordTags.includes('MAS') ? 'der' : wordTags.includes('FEM') ? 'die' : 'das',
-    });
+    if (!correct) {
+      setShowingAnswer({
+        correct,
+        article: wordTags.includes('MAS') ? 'der' : wordTags.includes('FEM') ? 'die' : 'das',
+      });
+    }
   }, [dispatch, timestamp, state.getIn(['gameSession','term'])]);
 
   const showReport = useCallback(async () => {
