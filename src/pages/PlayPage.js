@@ -76,14 +76,14 @@ export default (props) => {
     })();
   }, [dispatch, pathParams.sessionId]);
 
-  const onLoginSuccess = useCallback(async (response) => {
-    const { token, profile } = await network.post('/api/auth', {
-      tokenId: response.tokenId,
+  const onSuccess = useCallback(async (response) => {
+    const { token, profile, default_collection: defaultCollection } = await network.post('/api/auth', {
+      access_code: response.code,
     });
 
     localStorage.setItem('wg:token', token);
-    dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile });
-    history.replace('/collections'); // TODO Should be redirected to a more personl page
+    dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile, defaultCollection });
+    history.replace('/collections');
   }, [dispatch, history]);
 
   const session = state.getIn(['gameSession']);
@@ -128,11 +128,10 @@ export default (props) => {
             </div>
 
             <GoogleLogin
-                clientId={'976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'}
-                redirectUri={'http://localhost:3000/auth/google'}
-                onSuccess={onLoginSuccess}
-                // responseType={'code'}
-                className="mt-5"
+              clientId={'976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'}
+              onSuccess={onSuccess}
+              responseType={'code'}
+              className="mt-5"
             />
             <p className="text-muted">
               ...to keep track of your progress

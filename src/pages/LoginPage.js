@@ -52,7 +52,6 @@ export default (props) => {
           }}>Hallo Deutsch</h3>
           <GoogleLogin
             clientId={'976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'}
-            redirectUri={'http://localhost:3000/auth/google'}
             onSuccess={onSuccess}
             responseType={'code'}
           />
