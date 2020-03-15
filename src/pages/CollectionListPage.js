@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import {
   Button,
   Modal, ModalHeader, ModalBody, ModalFooter,
-  ListGroup, ListGroupItem,
   Form, FormGroup, Label, Input,
 } from 'reactstrap';
 import network, { debounce } from "../components/network";
@@ -29,7 +28,7 @@ export default (props) => {
     (async () => {
       const { ok, collections, myCollections, error } = await Promise.all([
           network.get('/api/collections'),
-          network.get('/api/me/collections'),
+          state.getIn(['profile','isLoggedIn']) ? network.get('/api/me/collections') : {},
       ]).then(([{ ok: _ok1, collections }, { ok: _ok2, collections: myCollections }]) => {
         // NOTE: We are being tolerant here.
         return {

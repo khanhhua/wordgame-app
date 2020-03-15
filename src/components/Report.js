@@ -62,6 +62,7 @@ export default () => {
             </div>
           </div>
         </div>
+        {!!weeklyPerformance &&
         <div className="card mt-4">
           <div className="card-header">
             <h3 className="mb-0">Weekly Report</h3>
@@ -70,6 +71,7 @@ export default () => {
             <LineChartWeeklyPerformance weeklyPerformance={weeklyPerformance.toJS()} />
           </div>
         </div>
+        }
       </div>
     </section>
   );

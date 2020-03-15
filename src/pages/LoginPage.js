@@ -1,11 +1,16 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import GoogleLogin from 'react-google-login';
-import { Link, useHistory } from 'react-router-dom';
+import { load } from 'recaptcha-v3';
+import { useHistory } from 'react-router-dom';
 import { DispatchContext } from "../components/context";
 import { ACTION_LOGIN, STATUS_OK } from "../components/constants";
 import network from "../components/network";
+import { Button } from "reactstrap";
+
+const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
 
 export default (props) => {
+  const [recaptcha, setRecaptcha] = useState(null);
   const dispatch = useContext(DispatchContext);
   const history = useHistory();
 
@@ -18,6 +23,25 @@ export default (props) => {
     dispatch({ type: ACTION_LOGIN, status:STATUS_OK, token, profile, defaultCollection });
     history.replace('/collections');
   }, [dispatch, history]);
+  const onStartSession = useCallback(async () => {
+    const recaptchaToken = await recaptcha.execute('start_session');
+    const { ok, session, token, error } = await network.post('/api/session',
+        {
+          recaptcha: recaptchaToken,
+        });
+    if (!ok) {
+      return console.log({ error });
+    }
+    localStorage.setItem('wg:token', token);
+    history.replace(`/play/${session.id}`);
+  }, [recaptcha]);
+
+  useEffect(() => {
+    (async () => {
+      const _recaptcha = await load(CAPTCHA_CLIENT_KEY);
+      setRecaptcha(_recaptcha);
+    })();
+  });
 
   return (
     <div className="container login-page">
@@ -39,10 +63,12 @@ export default (props) => {
       </section>
       <div className="row justify-content-center">
         <div className="col-6">
-          <Link
-            className="btn btn-primary btn-lg btn-block"
-            to="/play"
-          >TRY NOW!</Link>
+          <Button
+            disabled={!recaptcha}
+            color="primary"
+            block
+            onClick={onStartSession}
+          >TRY NOW!</Button>
         </div>
       </div>
     </div>
