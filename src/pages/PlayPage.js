@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { DispatchContext, StateContext } from "../components/context";
 import network from "../components/network";
@@ -12,12 +12,37 @@ import {
 import Stage from "../components/Stage";
 import Report from "../components/Report";
 import GoogleLogin from "react-google-login";
+import { Button } from "reactstrap";
+import { load } from "recaptcha-v3";
+
+const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
 
 export default (props) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+  const [recaptcha, setRecaptcha] = useState(null);
   const history = useHistory();
   const pathParams = useParams();
+
+  const onStartSession = useCallback(async () => {
+    const recaptchaToken = await recaptcha.execute('start_session');
+    const { ok, session, token, error } = await network.post('/api/session',
+        {
+          recaptcha: recaptchaToken,
+        });
+    if (!ok) {
+      return console.log({ error });
+    }
+    localStorage.setItem('wg:token', token);
+    history.replace(`/play/${session.id}`);
+  }, [recaptcha]);
+
+  useEffect(() => {
+    (async () => {
+      const _recaptcha = await load(CAPTCHA_CLIENT_KEY);
+      setRecaptcha(_recaptcha);
+    })();
+  });
 
   useEffect(() => {
     (async () => {
@@ -86,9 +111,22 @@ export default (props) => {
       {!!(session && session.get('id') && session.get('status') === SESSION_STATUS_DONE) &&
       <section className="row">
         <div className="col">
+          {state.getIn(['profile', 'isLoggedIn']) &&
           <Link className="btn btn-sm btn-link btn-block" to="/collections">Back to collections</Link>
+          }
           {!state.getIn(['profile', 'isLoggedIn']) &&
           <>
+            <div className="row mt-2 justify-content-center">
+              <div className="col-6">
+                <Button
+                    disabled={!recaptcha}
+                    color="primary"
+                    block
+                    onClick={onStartSession}
+                >TRY AGAIN!</Button>
+              </div>
+            </div>
+
             <GoogleLogin
                 clientId={'976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'}
                 redirectUri={'http://localhost:3000/auth/google'}

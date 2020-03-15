@@ -55,13 +55,21 @@ function App() {
             <AppNav />
             <ReportPage />
           </Route>
-          <Route path="/collections">
-            <AppNav />
-            <CollectionListPage />
-            <Route path="/collections/:collectionId">
-              <EditCollectionModal />
-            </Route>
-          </Route>
+          <Route path="/collections" render={() => {
+            if (!state.getIn(['profile', 'isLoggedIn'])) {
+              return <Redirect to="/login" />;
+            }
+
+            return (
+              <>
+                <AppNav />
+                <CollectionListPage />
+                <Route path="/collections/:collectionId">
+                  <EditCollectionModal />
+                </Route>
+              </>
+            );
+          }} />
           <Route>
             <Redirect to="/login" />
           </Route>
