@@ -114,6 +114,12 @@ export default ({ sessionId }) => {
         correct,
         article: wordTags.includes('MAS') ? 'der' : wordTags.includes('FEM') ? 'die' : 'das',
       });
+    } else {
+      if (state.getIn(['gameSession','hasNext'])) {
+        await fetchNextWord();
+      } else {
+        showReport();
+      }
     }
   }, [dispatch, timestamp, state.getIn(['gameSession','term'])]);
 
