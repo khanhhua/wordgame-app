@@ -1,7 +1,7 @@
 import { fromJS } from "immutable";
 import {
   ACTION_CREATE_COLLECTION,
-  ACTION_LIST_COLLECTIONS, ACTION_LOGIN,
+  ACTION_LIST_COLLECTIONS, ACTION_LOGIN, ACTION_LOGOUT,
   ACTION_NEXT_WORD,
   ACTION_SHOW_REPORT,
   ACTION_START_SESSION, SESSION_STATUS_DONE,
@@ -43,6 +43,12 @@ export default (state, { type, status, ...action }) => {
             isLoggedIn: true,
             defaultCollection: action.defaultCollection,
             ...action.profile,
+          }));
+    }
+    case ACTION_LOGOUT: {
+      return state
+          .set('profile', fromJS({
+            isLoggedIn: false,
           }));
     }
     case ACTION_LIST_COLLECTIONS: {

@@ -1,14 +1,17 @@
 import React, { useCallback, useContext } from 'react';
 import { Navbar, Nav, NavbarBrand, NavItem } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-import { StateContext } from './context';
+import { DispatchContext, StateContext } from './context';
+import { ACTION_LOGOUT } from './constants';
 
 export default () => {
-  const onLogoutClick = useCallback(() => {
-    window.localStorage.clear();
-    window.location.href = '/#/login';
-  }, []);
+  const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+  const onLogoutClick = useCallback(() => {
+    dispatch({ type: ACTION_LOGOUT });
+    window.localStorage.clear();
+    window.location.replace('/#/login');
+  }, []);
 
   return (
     <Navbar light className="bg-light">
