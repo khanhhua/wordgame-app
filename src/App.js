@@ -27,7 +27,7 @@ function App() {
           const { ok, profile, default_collection: defaultCollection } = await network.get('/api/auth');
           if (!ok) {
             localStorage.clear();
-            window.location.replace('/#/login');
+            window.location.replace('/login');
             return;
           }
 

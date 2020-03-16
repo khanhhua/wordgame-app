@@ -10,7 +10,7 @@ export default () => {
   const onLogoutClick = useCallback(() => {
     dispatch({ type: ACTION_LOGOUT });
     window.localStorage.clear();
-    window.location.replace('/#/login');
+    window.location.replace('/login');
   }, []);
 
   return (
