@@ -1,18 +1,20 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { load } from 'recaptcha-v3';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { Alert, Button } from 'reactstrap';
 import { DispatchContext } from "../components/context";
 import { ACTION_LOGIN, STATUS_OK } from "../components/constants";
 import network from "../components/network";
-import { Button } from "reactstrap";
 
 const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
 
-export default (props) => {
+export default () => {
   const [recaptcha, setRecaptcha] = useState(null);
   const dispatch = useContext(DispatchContext);
   const history = useHistory();
+  const params = useParams();
+  const location = useLocation();
 
   const onSuccess = useCallback(async (response) => {
     const { token, profile, default_collection: defaultCollection } = await network.post('/api/auth', {
@@ -37,6 +39,7 @@ export default (props) => {
   }, [recaptcha]);
 
   useEffect(() => {
+    console.log(params);
     (async () => {
       const _recaptcha = await load(CAPTCHA_CLIENT_KEY);
       setRecaptcha(_recaptcha);
@@ -45,6 +48,17 @@ export default (props) => {
 
   return (
     <div className="container login-page">
+      {!!(location.state && location.state.expired) &&
+      <Alert
+        className="mt-2 alert-float"
+        isOpen={true}
+        color="warning"
+        toggle={() => history.replace('/login')}
+      >
+        <h4 className="alert-heading">Your session has expired.</h4>
+        <p className="mt-3 text-center text-sm-left">Without logging in, your session lasts for only for 10 minutes.</p>
+      </Alert>
+      }
       <section className="row">
         <div className="col">
           <h3 style={{

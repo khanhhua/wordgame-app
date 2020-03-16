@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Modal,
   ModalHeader,
@@ -28,6 +29,7 @@ import Loader from "./Loader";
 const AddToCollectionModal = ({ term, addToCollection }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+  const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -36,6 +38,12 @@ const AddToCollectionModal = ({ term, addToCollection }) => {
       const { ok, collections, error } = await network.get('/api/me/collections');
 
       if (!ok) {
+        if (error.status_code === 401) {
+          localStorage.clear();
+          history.replace('/login', { expired: true });
+          return;
+        }
+
         dispatch({ type, status: STATUS_ERROR, error });
         return;
       }
@@ -76,6 +84,7 @@ const AddToCollectionModal = ({ term, addToCollection }) => {
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
+  const history = useHistory();
 
   const [status, setStatus] = useState({ busy: false, error: null });
   const [showingAnswer, setShowingAnswer] = useState(null);
@@ -88,6 +97,12 @@ export default ({ sessionId }) => {
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_PENDING });
     const { ok, term, cursor: newCursor, has_next: hasNext, error } = await network.get(`/api/words?cursor=${cursor || ''}`);
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error });
       return;
     }
@@ -99,13 +114,18 @@ export default ({ sessionId }) => {
     const wordId = state.getIn(['gameSession','term', 'id']);
     const wordTags = state.getIn(['gameSession','term', 'tags']);
     const correct = wordTags.includes(answer);
-    const { ok } = await network.post(`/api/stats`, {
+    const { ok, error } = await network.post(`/api/stats`, {
       session_id: sessionId,
       term_id: wordId,
       correct,
       seconds: (Date.now() / 1000) - timestamp,
     });
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
       return;
     }
 
@@ -143,6 +163,12 @@ export default ({ sessionId }) => {
     }));
 
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_ERROR, error });
       return;
     }
@@ -174,6 +200,12 @@ export default ({ sessionId }) => {
       term_id: term.get('id'),
     });
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       dispatch({ type: ACTION_ADD_TO_COLLECTION, status: STATUS_ERROR, error });
       return;
     }

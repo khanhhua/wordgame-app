@@ -42,6 +42,12 @@ export default (props) => {
       }));
 
       if (!ok) {
+        if (error.status_code === 401) {
+          localStorage.clear();
+          history.replace('/login', { expired: true });
+          return;
+        }
+
         dispatch({ type: ACTION_LIST_COLLECTIONS, status: STATUS_ERROR, error });
         return;
       }
@@ -60,6 +66,12 @@ export default (props) => {
             { category_id: collection.get('id') }
     );
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
       return;
     }
@@ -74,6 +86,12 @@ export default (props) => {
       name: newCollectionNameRef.current.value,
     });
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       return dispatch({ type, status: STATUS_ERROR, error });
     }
 

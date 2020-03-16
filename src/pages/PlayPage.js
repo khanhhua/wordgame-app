@@ -31,6 +31,12 @@ export default (props) => {
           recaptcha: recaptchaToken,
         });
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       return console.log({ error });
     }
     localStorage.setItem('wg:token', token);
@@ -49,6 +55,12 @@ export default (props) => {
       if (pathParams.sessionId) {
         const { ok, session, error } = await network.get('/api/session');
         if (!ok) {
+          if (error.status_code === 401) {
+            localStorage.clear();
+            history.replace('/login', { expired: true });
+            return;
+          }
+
           dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
           return;
         }
@@ -57,6 +69,12 @@ export default (props) => {
         dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
         const { ok, session, error } = await network.get('/api/session');
         if (!ok) {
+          if (error.status_code === 401) {
+            localStorage.clear();
+            history.replace('/login', { expired: true });
+            return;
+          }
+
           dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
           return;
         }

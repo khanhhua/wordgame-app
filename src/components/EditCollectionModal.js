@@ -21,8 +21,14 @@ import { DispatchContext } from './context';
 const debouncedNetwork = debounce(1);
 
 const debouncedSearch = _debounce((inputValue, callback) => {
-  network.get(`/api/search?q=${inputValue}`).then(({ ok, terms }) => {
+  network.get(`/api/search?q=${inputValue}`).then(({ ok, terms, error }) => {
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        window.history.replaceState({ expired: true }, null, '/login');
+        return;
+      }
+
       return [];
     }
     callback(terms.map(({id, word}) => ({value: id, label: word})));
@@ -56,7 +62,11 @@ export default () => {
     if (p) {
       const { ok, error } = await p;
       if (!ok) {
-        console.log({ error });
+        if (error.status_code === 401) {
+          localStorage.clear();
+          history.replace('/login', { expired: true });
+          return;
+        }
       }
     }
   }, [collection]);
@@ -73,6 +83,11 @@ export default () => {
     });
 
     if (!ok) {
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
       return dispatch({ type, status: STATUS_ERROR, error });
     }
 
@@ -85,7 +100,12 @@ export default () => {
   const onTermRemoved = useCallback(async (termId) => {
     const {ok, error} = await network.delete(`/api/me/collections/${collectionId}/terms/${termId}`);
     if (!ok) {
-      console.log({error});
+      if (error.status_code === 401) {
+        localStorage.clear();
+        history.replace('/login', { expired: true });
+        return;
+      }
+
       return;
     }
 
@@ -98,8 +118,14 @@ export default () => {
   useEffect(() => {
     setStatus({ busy: true });
     (async () => {
-      const { ok, collection: _c } = await network.get(`/api/me/collections/${collectionId}`);
+      const { ok, error, collection: _c } = await network.get(`/api/me/collections/${collectionId}`);
       if (!ok) {
+        if (error.status_code === 401) {
+          localStorage.clear();
+          history.replace('/login', { expired: true });
+          return;
+        }
+
         return;
       }
 

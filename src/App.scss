@@ -2,6 +2,13 @@ $COLOR_MAS: rgb(32,59,129);
 $COLOR_FEM: rgb(207,25,14);
 $COLOR_NEU: rgb(84,159,14);
 
+.alert-float {
+  position: absolute;
+  z-index: 999;
+  margin-left: 50%;
+  transform: translateX(-75%);
+}
+
 .actions {
 
 }

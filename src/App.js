@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import './App.scss';
 
 import PlayPage from "./pages/PlayPage";
@@ -27,7 +27,8 @@ function App() {
           const { ok, profile, default_collection: defaultCollection } = await network.get('/api/auth');
           if (!ok) {
             localStorage.clear();
-            return window.location.replace('/#/login');
+            window.location.replace('/#/login');
+            return;
           }
 
           dispatch({ type: ACTION_LOGIN, status: STATUS_OK, profile, defaultCollection });
