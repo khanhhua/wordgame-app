@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card, CardHeader, CardBody, Badge } from 'reactstrap';
 import network from "../components/network";
 import LineChartWeeklyPerformance from '../components/LineChartWeeklyPerformance';
@@ -20,6 +21,7 @@ const classFromTags = (tags) => {
 };
 
 export default (props) => {
+  const history = useHistory();
   const [status, setStatus] = useState({ busy: false, error: null });
   const [report, setReport] = useState({
     worstPerformers: [],
@@ -31,6 +33,12 @@ export default (props) => {
       setStatus({ busy: true });
       const { ok, report, error } = await network.get('/api/stats?reports=weekly&reports=worst&reports=histogram');
       if (!ok) {
+        if (error.status_code === 401) {
+          localStorage.clear();
+          history.replace('/login', { expired: true });
+          return;
+        }
+
         setStatus({ error });
         return;
       }

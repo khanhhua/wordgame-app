@@ -39,6 +39,13 @@ const handleResponse = async res => {
   try {
     const contentType = res.headers.get('content-type');
     if (contentType && contentType.match(/json/)) {
+      if (res.status >= 400) {
+        return {
+          ok: false,
+          error: (await res.json()),
+        };
+      }
+
       return res.json();
     } else {
       return {
