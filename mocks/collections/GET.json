@@ -1,41 +1,12 @@
-{
-  "ok": true,
-  "collections": [
-    {
-      "id": 1,
-      "name": "Anatomie"
-    },
-    {
-      "id": 2,
-      "name": "Architektur"
-    },
-    {
-      "id": 3,
-      "name": "Astronomie"
-    },
-    {
-      "id": 4,
-      "name": "Automobil"
-    },
-    {
-      "id": 5,
-      "name": "Biochemie"
-    },
-    {
-      "id": 6,
-      "name": "Biologie"
-    },
-    {
-      "id": 7,
-      "name": "Botanik"
-    },
-    {
-      "id": 8,
-      "name": "Chemie"
-    },
-    {
-      "id": 9,
-      "name": "Computer"
-    }
-  ]
-}
+[
+  {
+    "name": "A1.txt",
+    "path": "menschen/A1.txt",
+    "url": "https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/A1.txt?ref=master"
+  },
+  {
+    "name": "A2.txt",
+    "path": "menschen/A2.txt",
+    "url": "https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/A2.txt?ref=master"
+  }
+]

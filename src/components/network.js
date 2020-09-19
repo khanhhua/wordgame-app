@@ -16,7 +16,7 @@ const request = async (url, method, body=null) => {
   };
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    // headers['Authorization'] = `Bearer ${token}`;
   }
   // Normalize reponse to { ok, error }
   return fetch(url, method === 'GET' || method === 'DELETE' ? { headers, method } : {
@@ -59,6 +59,7 @@ const handleResponse = async res => {
 };
 
 const api = {
+  request,
   async get(uri) {
     const res = await request(`${BASE_URL}${uri}`, 'GET');
     return handleResponse(res);

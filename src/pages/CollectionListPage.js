@@ -6,6 +6,7 @@ import {
   Form, FormGroup, Label, Input,
 } from 'reactstrap';
 import network, { debounce } from "../components/network";
+import { getCollections } from '../components/github';
 import { DispatchContext, StateContext } from "../components/context";
 import {
   ACTION_LIST_COLLECTIONS,
@@ -26,19 +27,11 @@ export default (props) => {
 
   useEffect(() => {
     (async () => {
-      const { ok, collections, myCollections, error } = await Promise.all([
-          network.get('/api/collections'),
-          state.getIn(['profile','isLoggedIn']) ? network.get('/api/me/collections') : {},
-      ]).then(([{ ok: _ok1, collections }, { ok: _ok2, collections: myCollections }]) => {
-        // NOTE: We are being tolerant here.
-        return {
-          ok: _ok1 || _ok2,
-          collections,
-          myCollections,
-        }}
-      ).catch(error => ({
-        ok: false,
-        error,
+      const { ok, collections, myCollections, error } = await getCollections().then((collections) => ({
+        collections,
+        myCollections: [],
+        ok: true,
+        error: null,
       }));
 
       if (!ok) {

@@ -13,7 +13,7 @@ const terms = [
   },
   {
     id: 3,
-    word: 'Buch, das',
+    word: 'Buch',
     tags: 'SUB:NOM:SIN:NEU',
   }
 ];
