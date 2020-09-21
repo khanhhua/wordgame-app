@@ -14,6 +14,7 @@ import Report from "../components/Report";
 import GoogleLogin from "react-google-login";
 import { Button } from "reactstrap";
 import { load } from "recaptcha-v3";
+import {getSession} from "../components/session";
 
 const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
 
@@ -53,17 +54,18 @@ export default (props) => {
   useEffect(() => {
     (async () => {
       if (pathParams.sessionId) {
-        const { ok, session, error } = await network.get('/api/session');
-        if (!ok) {
-          if (error.status_code === 401) {
-            localStorage.clear();
-            history.replace('/login', { expired: true });
-            return;
-          }
+        const session = await getSession(pathParams.sessionId);
+        // if (!ok) {
+        //   if (error.status_code === 401) {
+        //     localStorage.clear();
+        //     history.replace('/login', { expired: true });
+        //     return;
+        //   }
+        //
+        //   dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
+        //   return;
+        // }
 
-          dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
-          return;
-        }
         dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
       } else {
         dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
