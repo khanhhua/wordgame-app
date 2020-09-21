@@ -97,7 +97,8 @@
   },
   "devDependencies": {
     "connect-api-mocker": "^1.7.0",
-    "node-sass": "^4.13.1"
+    "node-sass": "^4.13.1",
+    "prettier": "2.1.2"
   },
   "jest": {
     "roots": [

@@ -1,6 +1,11 @@
-import React, { useContext, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import './App.scss';
+import React, { useContext, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
+import "./App.scss";
 
 import PlayPage from "./pages/PlayPage";
 import LoginPage from "./pages/LoginPage";
@@ -18,24 +23,33 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const isLoggedIn = state.getIn(['profile', 'isLoggedIn']);
+      const isLoggedIn = state.getIn(["profile", "isLoggedIn"]);
       if (isLoggedIn) {
         return;
       } else {
-        const accessToken = localStorage.getItem('wg:token');
+        const accessToken = localStorage.getItem("wg:token");
         if (accessToken) {
-          const { ok, profile, default_collection: defaultCollection } = await network.get('/api/auth');
+          const {
+            ok,
+            profile,
+            default_collection: defaultCollection,
+          } = await network.get("/api/auth");
           if (!ok) {
             localStorage.clear();
-            window.location.replace('/login');
+            window.location.replace("/login");
             return;
           }
 
-          dispatch({ type: ACTION_LOGIN, status: STATUS_OK, profile, defaultCollection });
+          dispatch({
+            type: ACTION_LOGIN,
+            status: STATUS_OK,
+            profile,
+            defaultCollection,
+          });
         }
       }
     })();
-  }, [dispatch, state.getIn(['profile', 'isLoggedIn'])]);
+  }, [dispatch, state.getIn(["profile", "isLoggedIn"])]);
 
   return (
     <div className="App">
@@ -56,21 +70,24 @@ function App() {
             <AppNav />
             <ReportPage />
           </Route>
-          <Route path="/collections" render={() => {
-            if (!state.getIn(['profile', 'isLoggedIn'])) {
-              return <Redirect to="/login" />;
-            }
+          <Route
+            path="/collections"
+            render={() => {
+              if (!state.getIn(["profile", "isLoggedIn"])) {
+                return <Redirect to="/login" />;
+              }
 
-            return (
-              <>
-                <AppNav />
-                <CollectionListPage />
-                <Route path="/collections/:collectionId">
-                  <EditCollectionModal />
-                </Route>
-              </>
-            );
-          }} />
+              return (
+                <>
+                  <AppNav />
+                  <CollectionListPage />
+                  <Route path="/collections/:collectionId">
+                    <EditCollectionModal />
+                  </Route>
+                </>
+              );
+            }}
+          />
           <Route>
             <Redirect to="/login" />
           </Route>
