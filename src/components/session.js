@@ -1,4 +1,4 @@
-import { openDB } from 'idb';
+import {openDB} from 'idb';
 
 const DB_NAME = 'WordGame';
 const TBL_SESSIONS = 'sessions';
@@ -9,7 +9,7 @@ export const init = async () => {
     db = await openDB(DB_NAME, 4, {
         upgrade(db) {
             db.createObjectStore(TBL_SESSIONS, {
-               keyPath: 'id',
+                keyPath: 'id',
             });
             db.createObjectStore(TBL_TERMS, {
                 keyPath: 'id',
@@ -56,7 +56,7 @@ export const getSession = async (sessionId) => {
 export const getNextTerm = async (sessionId) => {
     const storeSession = db.transaction(TBL_SESSIONS, 'readwrite').objectStore(TBL_SESSIONS);
     const session = await storeSession.get(sessionId);
-    const { nextWordIndex, count } = session;
+    const {nextWordIndex, count} = session;
     if (nextWordIndex === -1) {
         return null;
     }
@@ -102,28 +102,28 @@ export const getSessionStats = async (sessionId) => {
     const session = await db.get(TBL_SESSIONS, sessionId);
 
     const stats = session.stats.reduce((acc, entry) => {
-        const term = terms.find(({ word: key }) => key === entry.termId);
-        const gender = term.tags.includes('MAS') ? 'der'
-            : term.tags.includes('FEM') ? 'die'
-            : term.tags.includes('NEU') ? 'das'
-            : null;
-        if (!gender) {
+            const term = terms.find(({word: key}) => key === entry.termId);
+            const gender = term.tags.includes('MAS') ? 'der'
+                : term.tags.includes('FEM') ? 'die'
+                    : term.tags.includes('NEU') ? 'das'
+                        : null;
+            if (!gender) {
+                return acc;
+            }
+
+            if (entry.correct) {
+                acc[gender].corrects += 1;
+            } else {
+                acc[gender].wrongs += 1;
+            }
+
             return acc;
-        }
-
-        if (entry.correct) {
-            acc[gender].corrects += 1;
-        } else {
-            acc[gender].wrongs += 1;
-        }
-
-        return acc;
-    },
-    {
-        der: { corrects: 0, wrongs: 0 },
-        die: { corrects: 0, wrongs: 0 },
-        das: { corrects: 0, wrongs: 0 },
-    });
+        },
+        {
+            der: {corrects: 0, wrongs: 0},
+            die: {corrects: 0, wrongs: 0},
+            das: {corrects: 0, wrongs: 0},
+        });
 
     return stats;
 };
