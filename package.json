@@ -33,6 +33,7 @@
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "4.0.0-beta.11",
+    "idb": "^5.0.6",
     "identity-obj-proxy": "3.0.0",
     "immutable": "^4.0.0-rc.12",
     "jest": "24.9.0",
@@ -96,7 +97,8 @@
   },
   "devDependencies": {
     "connect-api-mocker": "^1.7.0",
-    "node-sass": "^4.13.1"
+    "node-sass": "^4.13.1",
+    "prettier": "2.1.2"
   },
   "jest": {
     "roots": [
