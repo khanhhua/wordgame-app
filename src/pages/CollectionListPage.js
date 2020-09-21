@@ -6,7 +6,8 @@ import {
   Form, FormGroup, Label, Input,
 } from 'reactstrap';
 import network, { debounce } from "../components/network";
-import { getCollections } from '../components/github';
+import { getCollections, getTermsByCollection } from '../components/github';
+import { createSession } from '../components/session';
 import { DispatchContext, StateContext } from "../components/context";
 import {
   ACTION_LIST_COLLECTIONS,
@@ -54,22 +55,26 @@ export default (props) => {
 
   const onReviewClick = async (collection) => {
     dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
-    const { ok, session, error } = await network.post('/api/session', collection.get('is_owned') ?
-            { collection_id: collection.get('id') } :
-            { category_id: collection.get('id') }
-    );
-    if (!ok) {
-      if (error.status_code === 401) {
-        localStorage.clear();
-        history.replace('/login', { expired: true });
-        return;
-      }
+    const terms = await getTermsByCollection({ file: collection.get('file') });
+    console.log({terms});
+    // const { ok, session, error } = await network.post('/api/session', collection.get('is_owned') ?
+    //         { collection_id: collection.get('id') } :
+    //         { category_id: collection.get('id') }
+    // );
+    // if (!ok) {
+    //   if (error.status_code === 401) {
+    //     localStorage.clear();
+    //     history.replace('/login', { expired: true });
+    //     return;
+    //   }
+    //
+    //   dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
+    //   return;
+    // }
+    // dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
 
-      dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
-      return;
-    }
-    dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
-    history.push(`/play/${session.id}`);
+    const sessionId = await createSession(terms);
+    history.push(`/play/${sessionId}`);
   };
 
   const onNewCollectionCreate = useCallback(async () => {

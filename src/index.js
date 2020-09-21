@@ -7,23 +7,26 @@ import * as serviceWorker from './serviceWorker';
 
 import { DispatchContext, StateContext } from "./components/context";
 import reducer, { initialState } from "./components/reducer";
+import { init as initSession } from "./components/session";
 
 const Index = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-      <DispatchContext.Provider value={dispatch}>
-        <StateContext.Provider value={state}>
-          <App />
-        </StateContext.Provider>
-      </DispatchContext.Provider>
+    <DispatchContext.Provider value={dispatch}>
+      <StateContext.Provider value={state}>
+        <App />
+      </StateContext.Provider>
+    </DispatchContext.Provider>
   );
 };
 
-ReactDOM.render(
-  <Index />,
-  document.getElementById('root')
-);
+initSession().then(() => {
+  ReactDOM.render(
+    <Index />,
+    document.getElementById('root')
+  );
+})
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

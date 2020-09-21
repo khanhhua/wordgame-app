@@ -25,6 +25,7 @@ import {
   ACTION_LIST_COLLECTIONS,
 } from '../components/constants';
 import Loader from "./Loader";
+import {getNextTerm, updateStats} from "./session";
 
 const AddToCollectionModal = ({ term, addToCollection }) => {
   const dispatch = useContext(DispatchContext);
@@ -93,10 +94,10 @@ export default ({ sessionId }) => {
   const [timestamp, setTimestamp] = useState(null);
 
   const fetchNextWord = useCallback(async () => {
-    const cursor = state.getIn(['gameSession','cursor']);
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_PENDING });
-    const { ok, term, cursor: newCursor, has_next: hasNext, error } = await network.get(`/api/words?cursor=${cursor || ''}`);
-    if (!ok) {
+    const { term, hasNext, error } = await getNextTerm(sessionId);
+
+    if (!term) {
       if (error.status_code === 401) {
         localStorage.clear();
         history.replace('/login', { expired: true });
@@ -106,17 +107,17 @@ export default ({ sessionId }) => {
       dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error });
       return;
     }
-    dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext, cursor: newCursor });
+    dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext });
     setTimestamp(Date.now() / 1000);
-  }, [dispatch, state]);
+  }, [dispatch, state, sessionId]);
 
   const onSelectAnswer = useCallback(async (answer) => {
-    const wordId = state.getIn(['gameSession','term', 'id']);
+    const termId = state.getIn(['gameSession','term', 'id']);
     const wordTags = state.getIn(['gameSession','term', 'tags']);
     const correct = wordTags.includes(answer);
-    const { ok, error } = await network.post(`/api/stats`, {
-      session_id: sessionId,
-      term_id: wordId,
+
+    const { ok, error } = await updateStats(sessionId, {
+      termId,
       correct,
       seconds: (Date.now() / 1000) - timestamp,
     });
@@ -147,7 +148,7 @@ export default ({ sessionId }) => {
     setStatus({ busy: true });
 
     const sessionId = state.getIn(['gameSession', 'id']);
-    await network.delete(`/api/session`);
+    // TODO await network.delete(`/api/session`);
 
     dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
     const { ok, error, sessionReport, weeklyReport } = await Promise.all([
