@@ -25,7 +25,7 @@ import {
   ACTION_LIST_COLLECTIONS,
 } from '../components/constants';
 import Loader from "./Loader";
-import {getNextTerm, updateStats} from "./session";
+import {getNextTerm, getSessionStats, updateStats} from "./session";
 
 const AddToCollectionModal = ({ term, addToCollection }) => {
   const dispatch = useContext(DispatchContext);
@@ -151,34 +151,9 @@ export default ({ sessionId }) => {
     // TODO await network.delete(`/api/session`);
 
     dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
-    const { ok, error, sessionReport, weeklyReport } = await Promise.all([
-      network.get(`/api/stats/${sessionId}`),
-      network.get('/api/stats?reports=weekly'),
-    ]).then(([ sessionReport, weeklyReport ]) => ({
-      ok: sessionReport.ok || weeklyReport.ok,
-      sessionReport: sessionReport.report,
-      weeklyReport: weeklyReport.report,
-    })).catch(error => ({
-      ok: false,
-      error,
-    }));
+    const stats = await getSessionStats(sessionId);
 
-    if (!ok) {
-      if (error.status_code === 401) {
-        localStorage.clear();
-        history.replace('/login', { expired: true });
-        return;
-      }
-
-      dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_ERROR, error });
-      return;
-    }
-
-    setStatus({ busy: false });
-    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report: {
-      session: sessionReport,
-      ...weeklyReport,
-      } });
+    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_OK, report: { session: stats } });
   }, [dispatch, state.getIn(['gameSession','term'])]);
 
   const onSkipClick = useCallback(async () => {

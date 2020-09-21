@@ -73,8 +73,57 @@ export const getNextTerm = async (sessionId) => {
     };
 };
 
-export const updateStats = async (sessionId) => {
+export const updateStats = async (sessionId, entry) => {
+    const tx = db.transaction(TBL_SESSIONS, 'readwrite');
+    const storeSession = tx.objectStore(TBL_SESSIONS);
+    const session = await storeSession.get(sessionId);
+    await storeSession.put({
+        ...session,
+        corrects: session.corrects + entry.correct,
+        wrongs: session.wrongs + !entry.correct,
+        stats: (session.stats || []).concat(entry),
+    });
+    await tx.done;
+
     return {
         ok: true,
     };
 }
+
+export const getSessionStats = async (sessionId) => {
+    const terms = [];
+    let cursor = await db.transaction(TBL_TERMS).store.openCursor();
+
+    while (cursor) {
+        terms.push(cursor.value);
+        cursor = await cursor.continue();
+    }
+
+    const session = await db.get(TBL_SESSIONS, sessionId);
+
+    const stats = session.stats.reduce((acc, entry) => {
+        const term = terms.find(({ word: key }) => key === entry.termId);
+        const gender = term.tags.includes('MAS') ? 'der'
+            : term.tags.includes('FEM') ? 'die'
+            : term.tags.includes('NEU') ? 'das'
+            : null;
+        if (!gender) {
+            return acc;
+        }
+
+        if (entry.correct) {
+            acc[gender].corrects += 1;
+        } else {
+            acc[gender].wrongs += 1;
+        }
+
+        return acc;
+    },
+    {
+        der: { corrects: 0, wrongs: 0 },
+        die: { corrects: 0, wrongs: 0 },
+        das: { corrects: 0, wrongs: 0 },
+    });
+
+    return stats;
+};
