@@ -18,21 +18,14 @@ export default () => {
 
   const onSuccess = useCallback(
     async (response) => {
-      const {
-        token,
-        profile,
-        default_collection: defaultCollection,
-      } = await network.post("/api/auth", {
-        access_code: response.code,
-      });
+      const { accessToken: token, profileObj } = response;
 
+      localStorage.setItem("wg:profile", JSON.stringify(profileObj));
       localStorage.setItem("wg:token", token);
       dispatch({
         type: ACTION_LOGIN,
         status: STATUS_OK,
         token,
-        profile,
-        defaultCollection,
       });
       history.replace("/collections");
     },
@@ -87,7 +80,7 @@ export default () => {
               "976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com"
             }
             onSuccess={onSuccess}
-            responseType={"code"}
+            responseType={"token"}
           />
           <p className="text-muted">
             ...to coup with the insane irregularity in the German language.

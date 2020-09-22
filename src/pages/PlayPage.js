@@ -56,17 +56,6 @@ export default (props) => {
     (async () => {
       if (pathParams.sessionId) {
         const session = await getSession(pathParams.sessionId);
-        // if (!ok) {
-        //   if (error.status_code === 401) {
-        //     localStorage.clear();
-        //     history.replace('/login', { expired: true });
-        //     return;
-        //   }
-        //
-        //   dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
-        //   return;
-        // }
-
         dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
       } else {
         dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });

@@ -81,25 +81,9 @@ export default (props) => {
 
   const onReviewClick = async (collection) => {
     dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
-    const terms = await getTermsByCollection({ file: collection.get("file") });
-    console.log({ terms });
-    // const { ok, session, error } = await network.post('/api/session', collection.get('is_owned') ?
-    //         { collection_id: collection.get('id') } :
-    //         { category_id: collection.get('id') }
-    // );
-    // if (!ok) {
-    //   if (error.status_code === 401) {
-    //     localStorage.clear();
-    //     history.replace('/login', { expired: true });
-    //     return;
-    //   }
-    //
-    //   dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
-    //   return;
-    // }
-    // dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
-
+    const terms = await getTermsByCollection({ file: collection.get("file") }, 'noun');
     const sessionId = await createSession(terms);
+
     history.push(`/play/${sessionId}`);
   };
 

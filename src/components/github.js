@@ -11,7 +11,8 @@ async function content(url, parse) {
     throw new Error("Bad Request");
   }
 
-  const parsed = parse(atob(data.content));
+  const escaped = decodeURIComponent(escape(atob(data.content)));
+  const parsed = parse(escaped);
   return parsed;
 }
 
@@ -26,7 +27,7 @@ export const getCollections = async () => {
   }
 };
 
-export const getTermsByCollection = async ({ file }) => {
+export const getTermsByCollection = async ({ file }, flag=null) => {
   const url = `https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/${file}`;
   try {
     const words = await content(url, (decoded) => {
@@ -41,8 +42,18 @@ export const getTermsByCollection = async ({ file }) => {
             meaning: parts[1],
             tags: parts[2],
           };
+        })
+        .filter(term => {
+          switch (flag) {
+            default: return true;
+            case 'noun': {
+              const {tags} = term;
+              return tags.includes('MAS') || tags.includes('FEM') || tags.includes('NEU');
+            }
+          }
         });
     });
+    console.log({words});
     return words;
   } catch (e) {
     return [];
