@@ -75,8 +75,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "start:dev": "REACT_APP_API_BASE_URL=http://localhost:8080 node scripts/start.js",
-    "start:live": "REACT_APP_API_BASE_URL=https://hallodeutsch.fatmandesigner.com node scripts/start.js",
-    "build": "REACT_APP_API_BASE_URL=https://hallodeutsch.fatmandesigner.com node scripts/build.js",
+    "start:live": "REACT_APP_API_BASE_URL=http://hallodeutsch.fatmandesigner.com node scripts/start.js",
+    "build": "REACT_APP_API_BASE_URL=http://hallodeutsch.fatmandesigner.com node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "node node_modules/eslint/bin/eslint.js src"
   },

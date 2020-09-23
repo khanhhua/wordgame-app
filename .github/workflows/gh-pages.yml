@@ -29,7 +29,11 @@ jobs:
 #            ${{ runner.os }}-yarn-
 
       - run: npm install
-      - run: npm run build
+      - name: Build
+        env:
+          CI: false
+          PUBLIC_URL: http://hallodeutsch.fatmandesigner.com
+        run: npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
