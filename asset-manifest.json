@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.190bcdc3.chunk.css",
-    "main.js": "/static/js/main.95d55287.chunk.js",
-    "main.js.map": "/static/js/main.95d55287.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.7fc8a293.js",
-    "runtime-main.js.map": "/static/js/runtime-main.7fc8a293.js.map",
-    "static/css/2.47e06e2e.chunk.css": "/static/css/2.47e06e2e.chunk.css",
-    "static/js/2.ad5f3f63.chunk.js": "/static/js/2.ad5f3f63.chunk.js",
-    "static/js/2.ad5f3f63.chunk.js.map": "/static/js/2.ad5f3f63.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.8e604341f558aded2a5b6aea186fd750.js": "/precache-manifest.8e604341f558aded2a5b6aea186fd750.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.47e06e2e.chunk.css.map": "/static/css/2.47e06e2e.chunk.css.map",
-    "static/css/main.190bcdc3.chunk.css.map": "/static/css/main.190bcdc3.chunk.css.map",
-    "static/js/2.ad5f3f63.chunk.js.LICENSE.txt": "/static/js/2.ad5f3f63.chunk.js.LICENSE.txt"
+    "main.css": "https://www.khanhhua.com/wordgame-app/public/static/css/main.190bcdc3.chunk.css",
+    "main.js": "https://www.khanhhua.com/wordgame-app/public/static/js/main.abc8ab1b.chunk.js",
+    "main.js.map": "https://www.khanhhua.com/wordgame-app/public/static/js/main.abc8ab1b.chunk.js.map",
+    "runtime-main.js": "https://www.khanhhua.com/wordgame-app/public/static/js/runtime-main.e27c5c50.js",
+    "runtime-main.js.map": "https://www.khanhhua.com/wordgame-app/public/static/js/runtime-main.e27c5c50.js.map",
+    "static/css/2.47e06e2e.chunk.css": "https://www.khanhhua.com/wordgame-app/public/static/css/2.47e06e2e.chunk.css",
+    "static/js/2.74204a2a.chunk.js": "https://www.khanhhua.com/wordgame-app/public/static/js/2.74204a2a.chunk.js",
+    "static/js/2.74204a2a.chunk.js.map": "https://www.khanhhua.com/wordgame-app/public/static/js/2.74204a2a.chunk.js.map",
+    "index.html": "https://www.khanhhua.com/wordgame-app/public/index.html",
+    "precache-manifest.0bab5f1388e6259a51aa0b389a9987c4.js": "https://www.khanhhua.com/wordgame-app/public/precache-manifest.0bab5f1388e6259a51aa0b389a9987c4.js",
+    "service-worker.js": "https://www.khanhhua.com/wordgame-app/public/service-worker.js",
+    "static/css/2.47e06e2e.chunk.css.map": "https://www.khanhhua.com/wordgame-app/public/static/css/2.47e06e2e.chunk.css.map",
+    "static/css/main.190bcdc3.chunk.css.map": "https://www.khanhhua.com/wordgame-app/public/static/css/main.190bcdc3.chunk.css.map",
+    "static/js/2.74204a2a.chunk.js.LICENSE.txt": "https://www.khanhhua.com/wordgame-app/public/static/js/2.74204a2a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.7fc8a293.js",
+    "static/js/runtime-main.e27c5c50.js",
     "static/css/2.47e06e2e.chunk.css",
-    "static/js/2.ad5f3f63.chunk.js",
+    "static/js/2.74204a2a.chunk.js",
     "static/css/main.190bcdc3.chunk.css",
-    "static/js/main.95d55287.chunk.js"
+    "static/js/main.abc8ab1b.chunk.js"
   ]
 }
