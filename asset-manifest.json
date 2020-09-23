@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "https://www.khanhhua.com/wordgame-app/public/static/css/main.190bcdc3.chunk.css",
-    "main.js": "https://www.khanhhua.com/wordgame-app/public/static/js/main.abc8ab1b.chunk.js",
-    "main.js.map": "https://www.khanhhua.com/wordgame-app/public/static/js/main.abc8ab1b.chunk.js.map",
-    "runtime-main.js": "https://www.khanhhua.com/wordgame-app/public/static/js/runtime-main.e27c5c50.js",
-    "runtime-main.js.map": "https://www.khanhhua.com/wordgame-app/public/static/js/runtime-main.e27c5c50.js.map",
-    "static/css/2.47e06e2e.chunk.css": "https://www.khanhhua.com/wordgame-app/public/static/css/2.47e06e2e.chunk.css",
-    "static/js/2.74204a2a.chunk.js": "https://www.khanhhua.com/wordgame-app/public/static/js/2.74204a2a.chunk.js",
-    "static/js/2.74204a2a.chunk.js.map": "https://www.khanhhua.com/wordgame-app/public/static/js/2.74204a2a.chunk.js.map",
-    "index.html": "https://www.khanhhua.com/wordgame-app/public/index.html",
-    "precache-manifest.0bab5f1388e6259a51aa0b389a9987c4.js": "https://www.khanhhua.com/wordgame-app/public/precache-manifest.0bab5f1388e6259a51aa0b389a9987c4.js",
-    "service-worker.js": "https://www.khanhhua.com/wordgame-app/public/service-worker.js",
-    "static/css/2.47e06e2e.chunk.css.map": "https://www.khanhhua.com/wordgame-app/public/static/css/2.47e06e2e.chunk.css.map",
-    "static/css/main.190bcdc3.chunk.css.map": "https://www.khanhhua.com/wordgame-app/public/static/css/main.190bcdc3.chunk.css.map",
-    "static/js/2.74204a2a.chunk.js.LICENSE.txt": "https://www.khanhhua.com/wordgame-app/public/static/js/2.74204a2a.chunk.js.LICENSE.txt"
+    "main.css": "http://germanwordgame.khanhhua.com/static/css/main.190bcdc3.chunk.css",
+    "main.js": "http://germanwordgame.khanhhua.com/static/js/main.afa79a94.chunk.js",
+    "main.js.map": "http://germanwordgame.khanhhua.com/static/js/main.afa79a94.chunk.js.map",
+    "runtime-main.js": "http://germanwordgame.khanhhua.com/static/js/runtime-main.e257311f.js",
+    "runtime-main.js.map": "http://germanwordgame.khanhhua.com/static/js/runtime-main.e257311f.js.map",
+    "static/css/2.47e06e2e.chunk.css": "http://germanwordgame.khanhhua.com/static/css/2.47e06e2e.chunk.css",
+    "static/js/2.bf185256.chunk.js": "http://germanwordgame.khanhhua.com/static/js/2.bf185256.chunk.js",
+    "static/js/2.bf185256.chunk.js.map": "http://germanwordgame.khanhhua.com/static/js/2.bf185256.chunk.js.map",
+    "index.html": "http://germanwordgame.khanhhua.com/index.html",
+    "precache-manifest.e9a433d239a2c8db453f733c6461ab7e.js": "http://germanwordgame.khanhhua.com/precache-manifest.e9a433d239a2c8db453f733c6461ab7e.js",
+    "service-worker.js": "http://germanwordgame.khanhhua.com/service-worker.js",
+    "static/css/2.47e06e2e.chunk.css.map": "http://germanwordgame.khanhhua.com/static/css/2.47e06e2e.chunk.css.map",
+    "static/css/main.190bcdc3.chunk.css.map": "http://germanwordgame.khanhhua.com/static/css/main.190bcdc3.chunk.css.map",
+    "static/js/2.bf185256.chunk.js.LICENSE.txt": "http://germanwordgame.khanhhua.com/static/js/2.bf185256.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.e27c5c50.js",
+    "static/js/runtime-main.e257311f.js",
     "static/css/2.47e06e2e.chunk.css",
-    "static/js/2.74204a2a.chunk.js",
+    "static/js/2.bf185256.chunk.js",
     "static/css/main.190bcdc3.chunk.css",
-    "static/js/main.abc8ab1b.chunk.js"
+    "static/js/main.afa79a94.chunk.js"
   ]
 }
