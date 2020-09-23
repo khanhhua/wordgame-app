@@ -1,0 +1,38 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - fork-wordgame-data
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.1.0
+        with:
+          node-version: '12.x'
+
+#      - name: Get yarn cache
+#        id: npm-cache
+#        run: echo "::set-output name=dir::$(npm cache dir)"
+#
+#      - name: Cache dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.npm-cache.outputs.dir }}
+#          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-yarn-
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
