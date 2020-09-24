@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "http://hallodeutsch.fatmandesigner.com/precache-manifest.8d7cac178ba55be79388690a9ca3fae7.js"
+  "http://hallodeutsch.fatmandesigner.com/precache-manifest.1b41822177f6bf4e313af9b97fdd9a8a.js"
 );
 
 self.addEventListener('message', (event) => {
