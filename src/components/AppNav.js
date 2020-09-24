@@ -16,7 +16,7 @@ export default () => {
   return (
     <Navbar light className="bg-light">
       <NavbarBrand className="font-weight-lighter">Hallo Deutsch</NavbarBrand>
-      {!!state.getIn(['profile', 'isLoggedIn']) && (
+      {!!state.getIn(['profile', 'isLoggedIn']) && ([
         <Nav className="mx-auto">
           <NavLink to="/collections" exact className="nav-item px-2">
             Collections
@@ -24,9 +24,7 @@ export default () => {
           <NavLink to="/report" exact className="nav-item px-2">
             Report
           </NavLink>
-        </Nav>
-      )}
-      {!!state.getIn(['profile', 'isLoggedIn']) && (
+        </Nav>,
         <Nav>
           <GoogleLogout
               clientId={
@@ -36,7 +34,7 @@ export default () => {
               onLogoutSuccess={onLogout}
           />
         </Nav>
-      )}
+      ])}
     </Navbar>
   );
 };

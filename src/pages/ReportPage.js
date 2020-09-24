@@ -21,7 +21,6 @@ const classFromTags = (tags) => {
 };
 
 export default (props) => {
-  const history = useHistory();
   const [status, setStatus] = useState({ busy: false, error: null });
   const [report, setReport] = useState({
     worstPerformers: [],
