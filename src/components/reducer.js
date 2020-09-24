@@ -1,4 +1,4 @@
-import { fromJS } from "immutable";
+import { fromJS } from 'immutable';
 import {
   ACTION_CREATE_COLLECTION,
   ACTION_LIST_COLLECTIONS,
@@ -12,7 +12,7 @@ import {
   SESSION_STATUS_PLAYING,
   STATUS_ERROR,
   STATUS_PENDING,
-} from "./constants";
+} from './constants';
 
 export const initialState = fromJS({
   profile: {
@@ -28,9 +28,9 @@ export const initialState = fromJS({
 
 export default (state, { type, status, ...action }) => {
   if (status === STATUS_ERROR) {
-    if (action.error && action.error === "Invalid token") {
+    if (action.error && action.error === 'Invalid token') {
       return state.set(
-        "profile",
+        'profile',
         fromJS({
           isLoggedIn: false,
         })
@@ -46,7 +46,7 @@ export default (state, { type, status, ...action }) => {
   switch (type) {
     case ACTION_LOGIN: {
       return state.set(
-        "profile",
+        'profile',
         fromJS({
           isLoggedIn: true,
           defaultCollection: action.defaultCollection,
@@ -56,7 +56,7 @@ export default (state, { type, status, ...action }) => {
     }
     case ACTION_LOGOUT: {
       return state.set(
-        "profile",
+        'profile',
         fromJS({
           isLoggedIn: false,
         })
@@ -64,17 +64,17 @@ export default (state, { type, status, ...action }) => {
     }
     case ACTION_LIST_COLLECTIONS: {
       return state
-        .set("collections", fromJS(action.collections))
-        .set("myCollections", fromJS(action.myCollections));
+        .set('collections', fromJS(action.collections))
+        .set('myCollections', fromJS(action.myCollections));
     }
     case ACTION_CREATE_COLLECTION: {
-      return state.updateIn(["myCollections"], (collections) =>
+      return state.updateIn(['myCollections'], (collections) =>
         collections.unshift(fromJS(action.collection))
       );
     }
     case ACTION_START_SESSION: {
       return state.setIn(
-        ["gameSession"],
+        ['gameSession'],
         fromJS({
           ...action.session,
           hasNext: true,
@@ -84,14 +84,14 @@ export default (state, { type, status, ...action }) => {
     }
     case ACTION_NEXT_WORD: {
       return state
-        .setIn(["gameSession", "term"], fromJS(action.term))
-        .setIn(["gameSession", "cursor"], action.cursor)
-        .setIn(["gameSession", "hasNext"], action.hasNext);
+        .setIn(['gameSession', 'term'], fromJS(action.term))
+        .setIn(['gameSession', 'cursor'], action.cursor)
+        .setIn(['gameSession', 'hasNext'], action.hasNext);
     }
     case ACTION_SHOW_REPORT: {
       return state
-        .setIn(["gameSession", "status"], SESSION_STATUS_DONE)
-        .set("report", fromJS(action.report));
+        .setIn(['gameSession', 'status'], SESSION_STATUS_DONE)
+        .set('report', fromJS(action.report));
     }
     default:
       return state;

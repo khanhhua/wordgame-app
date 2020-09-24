@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { StateContext } from "./context";
-import LineChartWeeklyPerformance from "./LineChartWeeklyPerformance";
+import React, { useContext } from 'react';
+import { StateContext } from './context';
+import LineChartWeeklyPerformance from './LineChartWeeklyPerformance';
 
 /**
  * Post-session report
@@ -9,19 +9,19 @@ import LineChartWeeklyPerformance from "./LineChartWeeklyPerformance";
 export default () => {
   const state = useContext(StateContext);
 
-  const session = state.getIn(["report", "session"]);
-  const weeklyPerformance = state.getIn(["report", "weekly_performance"]);
+  const session = state.getIn(['report', 'session']);
+  const weeklyPerformance = state.getIn(['report', 'weekly_performance']);
 
   const sessionRatios = {
     der:
-      session.getIn(["der", "corrects"]) /
-      (session.getIn(["der", "corrects"]) + session.getIn(["der", "wrongs"])),
+      session.getIn(['der', 'corrects']) /
+      (session.getIn(['der', 'corrects']) + session.getIn(['der', 'wrongs'])),
     die:
-      session.getIn(["die", "corrects"]) /
-      (session.getIn(["die", "corrects"]) + session.getIn(["die", "wrongs"])),
+      session.getIn(['die', 'corrects']) /
+      (session.getIn(['die', 'corrects']) + session.getIn(['die', 'wrongs'])),
     das:
-      session.getIn(["das", "corrects"]) /
-      (session.getIn(["das", "corrects"]) + session.getIn(["das", "wrongs"])),
+      session.getIn(['das', 'corrects']) /
+      (session.getIn(['das', 'corrects']) + session.getIn(['das', 'wrongs'])),
   };
 
   return (

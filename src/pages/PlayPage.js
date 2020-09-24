@@ -16,7 +16,7 @@ import Report from "../components/Report";
 import GoogleLogin from "react-google-login";
 import { Button } from "reactstrap";
 import { load } from "recaptcha-v3";
-import { getSession } from "../components/session";
+import {createSession, getSession, renewSession} from "../components/session";
 
 const CAPTCHA_CLIENT_KEY = "6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh";
 
@@ -28,21 +28,10 @@ export default (props) => {
   const pathParams = useParams();
 
   const onStartSession = useCallback(async () => {
-    const recaptchaToken = await recaptcha.execute("start_session");
-    const { ok, session, token, error } = await network.post("/api/session", {
-      recaptcha: recaptchaToken,
-    });
-    if (!ok) {
-      if (error.status_code === 401) {
-        localStorage.clear();
-        history.replace("/login", { expired: true });
-        return;
-      }
+    // const recaptchaToken = await recaptcha.execute("start_session");
+    const sessionId = await renewSession();
 
-      return console.log({ error });
-    }
-    localStorage.setItem("wg:token", token);
-    history.replace(`/play/${session.id}`);
+    history.replace(`/play/${sessionId}`);
   }, [recaptcha]);
 
   useEffect(() => {
@@ -58,41 +47,10 @@ export default (props) => {
         const session = await getSession(pathParams.sessionId);
         dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
       } else {
-        dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
-        const { ok, session, error } = await network.get("/api/session");
-        if (!ok) {
-          if (error.status_code === 401) {
-            localStorage.clear();
-            history.replace("/login", { expired: true });
-            return;
-          }
-
-          dispatch({ type: ACTION_START_SESSION, status: STATUS_ERROR, error });
-          return;
-        }
-
-        if (!session) {
-          const {
-            ok: createOK,
-            session: createdSession,
-            error: createError,
-          } = await network.post("/api/session");
-          if (!createOK) {
-            dispatch({
-              type: ACTION_START_SESSION,
-              status: STATUS_ERROR,
-              error: createError,
-            });
-            return;
-          }
-
-          dispatch({
-            type: ACTION_START_SESSION,
-            status: STATUS_OK,
-            session: createdSession,
-          });
+        if (localStorage.getItem('wg:token')) {
+          history.replace("/collections");
         } else {
-          dispatch({ type: ACTION_START_SESSION, status: STATUS_OK, session });
+          history.replace("/login");
         }
       }
     })();
@@ -100,21 +58,15 @@ export default (props) => {
 
   const onSuccess = useCallback(
     async (response) => {
-      const {
-        token,
-        profile,
-        default_collection: defaultCollection,
-      } = await network.post("/api/auth", {
-        access_code: response.code,
-      });
+      const { accessToken: token, profileObj } = response;
 
+      localStorage.setItem("wg:profileObj", profileObj);
       localStorage.setItem("wg:token", token);
       dispatch({
         type: ACTION_LOGIN,
         status: STATUS_OK,
         token,
-        profile,
-        defaultCollection,
+        profile: profileObj,
       });
       history.replace("/collections");
     },

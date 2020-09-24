@@ -6,6 +6,7 @@ import { Alert, Button } from "reactstrap";
 import { DispatchContext } from "../components/context";
 import { ACTION_LOGIN, STATUS_OK } from "../components/constants";
 import network from "../components/network";
+import {createSession} from "../components/session";
 
 const CAPTCHA_CLIENT_KEY = "6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh";
 
@@ -32,15 +33,10 @@ export default () => {
     [dispatch, history]
   );
   const onStartSession = useCallback(async () => {
-    const recaptchaToken = await recaptcha.execute("start_session");
-    const { ok, session, token, error } = await network.post("/api/session", {
-      recaptcha: recaptchaToken,
-    });
-    if (!ok) {
-      return console.log({ error });
-    }
-    localStorage.setItem("wg:token", token);
-    history.replace(`/play/${session.id}`);
+    // const recaptchaToken = await recaptcha.execute("start_session");
+    const sessionId = await createSession([]);
+    // localStorage.setItem("wg:token", token);
+    history.replace(`/play/${sessionId}`);
   }, [recaptcha]);
 
   useEffect(() => {

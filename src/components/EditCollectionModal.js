@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Button,
   Form,
@@ -11,17 +11,17 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from "reactstrap";
-import AsyncSelect from "react-select/async";
-import { useHistory, useParams } from "react-router-dom";
-import { default as _debounce } from "lodash.debounce";
-import network, { debounce } from "./network";
+} from 'reactstrap';
+import AsyncSelect from 'react-select/async';
+import { useHistory, useParams } from 'react-router-dom';
+import { default as _debounce } from 'lodash.debounce';
+import network, { debounce } from './network';
 import {
   ACTION_ADD_TO_COLLECTION,
   STATUS_ERROR,
   STATUS_PENDING,
-} from "./constants";
-import { DispatchContext } from "./context";
+} from './constants';
+import { DispatchContext } from './context';
 
 const debouncedNetwork = debounce(1);
 
@@ -31,7 +31,7 @@ const debouncedSearch = _debounce(
       if (!ok) {
         if (error.status_code === 401) {
           localStorage.clear();
-          window.history.replaceState({ expired: true }, null, "/login");
+          window.history.replaceState({ expired: true }, null, '/login');
           return;
         }
 
@@ -53,11 +53,11 @@ export default () => {
   const { collectionId = null } = useParams();
   const [status, setStatus] = useState({ busy: false, error: null });
   const [collection, setCollection] = useState({});
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [shownCount, setShownCount] = useState(10);
 
   const onCloseClick = useCallback(() => {
-    history.replace("/collections");
+    history.replace('/collections');
   }, [history]);
   const onEditCollectionNameChanged = useCallback(
     async ({ target: { value } }) => {
@@ -74,7 +74,7 @@ export default () => {
         if (!ok) {
           if (error.status_code === 401) {
             localStorage.clear();
-            history.replace("/login", { expired: true });
+            history.replace('/login', { expired: true });
             return;
           }
         }
@@ -85,7 +85,7 @@ export default () => {
 
   const onNewTermSelected = useCallback(
     async (choice, { action }) => {
-      if (action !== "select-option") {
+      if (action !== 'select-option') {
         return;
       }
       const type = ACTION_ADD_TO_COLLECTION;
@@ -101,7 +101,7 @@ export default () => {
       if (!ok) {
         if (error.status_code === 401) {
           localStorage.clear();
-          history.replace("/login", { expired: true });
+          history.replace('/login', { expired: true });
           return;
         }
         return dispatch({ type, status: STATUS_ERROR, error });
@@ -126,7 +126,7 @@ export default () => {
       if (!ok) {
         if (error.status_code === 401) {
           localStorage.clear();
-          history.replace("/login", { expired: true });
+          history.replace('/login', { expired: true });
           return;
         }
 
@@ -153,7 +153,7 @@ export default () => {
       if (!ok) {
         if (error.status_code === 401) {
           localStorage.clear();
-          history.replace("/login", { expired: true });
+          history.replace('/login', { expired: true });
           return;
         }
 

@@ -1,7 +1,7 @@
-import { default as _debounce } from "lodash.debounce";
+import { default as _debounce } from 'lodash.debounce';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:3000";
-const prefix = "wg"; // wordgame
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
+const prefix = 'wg'; // wordgame
 
 /**
  *
@@ -13,7 +13,7 @@ const prefix = "wg"; // wordgame
 const request = async (url, method, body = null) => {
   const token = localStorage.getItem(`${prefix}:token`);
   const headers = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   };
 
   if (token) {
@@ -22,7 +22,7 @@ const request = async (url, method, body = null) => {
   // Normalize reponse to { ok, error }
   return fetch(
     url,
-    method === "GET" || method === "DELETE"
+    method === 'GET' || method === 'DELETE'
       ? { headers, method }
       : {
           headers,
@@ -43,7 +43,7 @@ const handleResponse = async (res) => {
   }
 
   try {
-    const contentType = res.headers.get("content-type");
+    const contentType = res.headers.get('content-type');
     if (contentType && contentType.match(/json/)) {
       if (res.status >= 400) {
         return {
@@ -67,13 +67,13 @@ const handleResponse = async (res) => {
 const api = {
   request,
   async get(uri) {
-    const res = await request(`${BASE_URL}${uri}`, "GET");
+    const res = await request(`${BASE_URL}${uri}`, 'GET');
     return handleResponse(res);
   },
   async post(uri, payload) {
     const res = await request(
       `${BASE_URL}${uri}`,
-      "POST",
+      'POST',
       JSON.stringify(payload)
     );
     return handleResponse(res);
@@ -81,7 +81,7 @@ const api = {
   async put(uri, payload) {
     const res = await request(
       `${BASE_URL}${uri}`,
-      "PUT",
+      'PUT',
       JSON.stringify(payload)
     );
     return handleResponse(res);
@@ -89,13 +89,13 @@ const api = {
   async patch(uri, payload) {
     const res = await request(
       `${BASE_URL}${uri}`,
-      "PATCH",
+      'PATCH',
       JSON.stringify(payload)
     );
     return handleResponse(res);
   },
   async delete(uri) {
-    const res = await request(`${BASE_URL}${uri}`, "DELETE");
+    const res = await request(`${BASE_URL}${uri}`, 'DELETE');
     return handleResponse(res);
   },
 };
