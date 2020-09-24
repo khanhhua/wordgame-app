@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import { DispatchContext, StateContext } from "./components/context";
 import reducer, { initialState } from "./components/reducer";
-import { init as initSession } from "./components/session";
+import { init as initDb } from "./components/indexeddb";
 
 const Index = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -21,7 +21,7 @@ const Index = (props) => {
   );
 };
 
-initSession().then(() => {
+initDb().then(() => {
   ReactDOM.render(<Index />, document.getElementById("root"));
 });
 

@@ -1,24 +1,10 @@
-import { openDB } from 'idb';
+import {getDb} from './indexeddb';
 
-const DB_NAME = 'WordGame';
 const TBL_SESSIONS = 'sessions';
 const TBL_TERMS = 'terms';
-let db = null;
-
-export const init = async () => {
-  db = await openDB(DB_NAME, 4, {
-    upgrade(db) {
-      db.createObjectStore(TBL_SESSIONS, {
-        keyPath: 'id',
-      });
-      db.createObjectStore(TBL_TERMS, {
-        keyPath: 'id',
-      }).createIndex('index', 'index');
-    },
-  });
-};
 
 export const renewSession = async () => {
+  const db = await getDb();
   let cursor = await db.transaction(TBL_TERMS, 'read').store.openCursor();
   const terms = [];
 
@@ -31,6 +17,7 @@ export const renewSession = async () => {
 };
 
 export const createSession = async (terms) => {
+  const db = await getDb();
   const txSession = db.transaction(TBL_SESSIONS, 'readwrite');
   const sessionId = Date.now().toString();
   await Promise.all([
@@ -63,6 +50,7 @@ export const createSession = async (terms) => {
 };
 
 export const getSession = async (sessionId) => {
+  const db = await getDb();
   const store = db.transaction(TBL_SESSIONS).objectStore(TBL_SESSIONS);
   const session = await store.get(sessionId);
 
@@ -70,6 +58,7 @@ export const getSession = async (sessionId) => {
 };
 
 export const getNextTerm = async (sessionId) => {
+  const db = await getDb();
   const storeSession = db
     .transaction(TBL_SESSIONS, 'readwrite')
     .objectStore(TBL_SESSIONS);
@@ -92,6 +81,7 @@ export const getNextTerm = async (sessionId) => {
 };
 
 export const updateStats = async (sessionId, entry) => {
+  const db = await getDb();
   const tx = db.transaction(TBL_SESSIONS, 'readwrite');
   const storeSession = tx.objectStore(TBL_SESSIONS);
   const session = await storeSession.get(sessionId);
@@ -110,6 +100,7 @@ export const updateStats = async (sessionId, entry) => {
 
 export const getSessionStats = async (sessionId) => {
   const terms = [];
+  const db = await getDb();
   let cursor = await db.transaction(TBL_TERMS).store.openCursor();
 
   while (cursor) {
