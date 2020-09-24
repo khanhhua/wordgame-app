@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a5087eac9fca6149a0cbb47f65259de4",
+    "revision": "1e1a25250b97fd67b4c4598288e12be0",
     "url": "http://hallodeutsch.fatmandesigner.com/index.html"
   },
   {
-    "revision": "c305a71789d20f07b967",
+    "revision": "8b585907d4497a77c845",
     "url": "http://hallodeutsch.fatmandesigner.com/static/css/2.47e06e2e.chunk.css"
   },
   {
-    "revision": "9971c97812839ef83f91",
+    "revision": "e886648164f3bf0ad2e9",
     "url": "http://hallodeutsch.fatmandesigner.com/static/css/main.190bcdc3.chunk.css"
   },
   {
-    "revision": "c305a71789d20f07b967",
-    "url": "http://hallodeutsch.fatmandesigner.com/static/js/2.248a3fdf.chunk.js"
+    "revision": "8b585907d4497a77c845",
+    "url": "http://hallodeutsch.fatmandesigner.com/static/js/2.fbab53ef.chunk.js"
   },
   {
     "revision": "77c52c67682ebaf3c87f021fd687577f",
-    "url": "http://hallodeutsch.fatmandesigner.com/static/js/2.248a3fdf.chunk.js.LICENSE.txt"
+    "url": "http://hallodeutsch.fatmandesigner.com/static/js/2.fbab53ef.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "9971c97812839ef83f91",
-    "url": "http://hallodeutsch.fatmandesigner.com/static/js/main.15696299.chunk.js"
+    "revision": "e886648164f3bf0ad2e9",
+    "url": "http://hallodeutsch.fatmandesigner.com/static/js/main.c03e644a.chunk.js"
   },
   {
     "revision": "4290d44d066ade5888ff",
