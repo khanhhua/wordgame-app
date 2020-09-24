@@ -1,5 +1,6 @@
+import {GoogleLogout} from 'react-google-login';
 import React, { useCallback, useContext } from 'react';
-import { Nav, Navbar, NavbarBrand, NavItem } from 'reactstrap';
+import { Nav, Navbar, NavbarBrand } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { DispatchContext, StateContext } from './context';
 import { ACTION_LOGOUT } from './constants';
@@ -7,10 +8,9 @@ import { ACTION_LOGOUT } from './constants';
 export default () => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
-  const onLogoutClick = useCallback(() => {
+  const onLogout = useCallback(() => {
     dispatch({ type: ACTION_LOGOUT });
     window.localStorage.clear();
-    window.location.replace('/login');
   }, []);
 
   return (
@@ -28,7 +28,13 @@ export default () => {
       )}
       {!!state.getIn(['profile', 'isLoggedIn']) && (
         <Nav>
-          <NavItem onClick={onLogoutClick}>Logout</NavItem>
+          <GoogleLogout
+              clientId={
+                "976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com"
+              }
+              buttonText="Logout"
+              onLogoutSuccess={onLogout}
+          />
         </Nav>
       )}
     </Navbar>

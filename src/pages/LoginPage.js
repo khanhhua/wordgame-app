@@ -35,7 +35,6 @@ export default () => {
   const onStartSession = useCallback(async () => {
     // const recaptchaToken = await recaptcha.execute("start_session");
     const sessionId = await createSession([]);
-    // localStorage.setItem("wg:token", token);
     history.replace(`/play/${sessionId}`);
   }, [recaptcha]);
 
@@ -77,6 +76,7 @@ export default () => {
             }
             onSuccess={onSuccess}
             responseType={"token"}
+            isSignedIn={true}
           />
           <p className="text-muted">
             ...to coup with the insane irregularity in the German language.
