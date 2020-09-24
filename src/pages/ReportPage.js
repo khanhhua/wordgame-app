@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Badge, Card, CardBody, CardHeader } from "reactstrap";
-import network from "../components/network";
-import LineChartWeeklyPerformance from "../components/LineChartWeeklyPerformance";
-import BarChartHistogram from "../components/BarChartHistogram";
-import Loader from "../components/Loader";
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Badge, Card, CardBody, CardHeader } from 'reactstrap';
+import LineChartWeeklyPerformance from '../components/LineChartWeeklyPerformance';
+import BarChartHistogram from '../components/BarChartHistogram';
+import Loader from '../components/Loader';
+import {getLocalReports} from '../components/reporting';
 
 const bgClasses = {
-  MAS: "bg-masculine",
-  FEM: "bg-feminine",
-  NEU: "bg-neuter",
+  MAS: 'bg-masculine',
+  FEM: 'bg-feminine',
+  NEU: 'bg-neuter',
 };
 
 const classFromTags = (tags) => {
@@ -17,7 +17,7 @@ const classFromTags = (tags) => {
   if (match) {
     return bgClasses[match[0]];
   }
-  return "";
+  return '';
 };
 
 export default (props) => {
@@ -31,39 +31,27 @@ export default (props) => {
   useEffect(() => {
     (async () => {
       setStatus({ busy: true });
-      const { ok, report, error } = await network.get(
-        "/api/stats?reports=weekly&reports=worst&reports=histogram"
-      );
-      if (!ok) {
-        if (error.status_code === 401) {
-          localStorage.clear();
-          history.replace("/login", { expired: true });
-          return;
-        }
-
-        setStatus({ error });
-        return;
-      }
+      const {worstPerformers, weeklyPerformance,histogram} = await getLocalReports({});
 
       setStatus({ busy: false });
       setReport({
-        worstPerformers: report.worst_performers,
-        weeklyPerformance: report.weekly_performance,
-        histogram: report.histogram,
+        worstPerformers,
+        weeklyPerformance,
+        histogram,
       });
     })();
   }, []);
 
   return (
-    <div className="container report-page">
+    <div className='container report-page'>
       {!!status.busy && <Loader />}
-      <section className="row">
-        <div className="col">
+      <section className='row'>
+        <div className='col'>
           <h2>Report</h2>
 
           <Card>
             <CardHeader>
-              <h5 className="mb-0">Needs improvements</h5>
+              <h5 className='mb-0'>Needs improvements</h5>
             </CardHeader>
             <CardBody>
               {report.worstPerformers.map((item) => (
@@ -73,15 +61,15 @@ export default (props) => {
                   style={{ opacity: 1.05 - item.confidence_factor }}
                 >
                   {item.word}
-                  <span className="pl-2">{item.correct_factor * 100}%</span>
+                  <span className='pl-2'>{item.correct_factor * 100}%</span>
                 </Badge>
               ))}
             </CardBody>
           </Card>
 
-          <Card className="mt-2">
+          <Card className='mt-2'>
             <CardHeader>
-              <h5 className="mb-0">Performance</h5>
+              <h5 className='mb-0'>Performance</h5>
             </CardHeader>
             <CardBody>
               {!!(report && report.histogram && report.histogram.length) && (

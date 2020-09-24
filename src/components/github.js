@@ -1,14 +1,14 @@
-import api from "./network";
+import api from './network';
 
 async function content(url, parse) {
-  const res = await api.request(url, "GET");
+  const res = await api.request(url, 'GET');
   if (!res.ok) {
-    throw new Error("Bad Request");
+    throw new Error('Bad Request');
   }
 
   const data = await res.json();
-  if (data.encoding !== "base64") {
-    throw new Error("Bad Request");
+  if (data.encoding !== 'base64') {
+    throw new Error('Bad Request');
   }
 
   const escaped = decodeURIComponent(escape(atob(data.content)));
@@ -18,7 +18,7 @@ async function content(url, parse) {
 
 export const getCollections = async () => {
   const url =
-    "https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/package.json";
+    'https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/package.json';
   try {
     const json = await content(url, JSON.parse);
     return json.collections;
@@ -27,15 +27,15 @@ export const getCollections = async () => {
   }
 };
 
-export const getTermsByCollection = async ({ file }, flag=null) => {
+export const getTermsByCollection = async ({ file }, flag = null) => {
   const url = `https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/${file}`;
   try {
     const words = await content(url, (decoded) => {
       return decoded
-        .split("\n")
+        .split('\n')
         .filter(Boolean)
         .map((line) => {
-          const parts = line.split(";");
+          const parts = line.split(';');
           return {
             id: parts[0],
             word: parts[0],
@@ -43,17 +43,22 @@ export const getTermsByCollection = async ({ file }, flag=null) => {
             tags: parts[2],
           };
         })
-        .filter(term => {
+        .filter((term) => {
           switch (flag) {
-            default: return true;
+            default:
+              return true;
             case 'noun': {
-              const {tags} = term;
-              return tags.includes('MAS') || tags.includes('FEM') || tags.includes('NEU');
+              const { tags } = term;
+              return (
+                tags.includes('MAS') ||
+                tags.includes('FEM') ||
+                tags.includes('NEU')
+              );
             }
           }
         });
     });
-    console.log({words});
+    console.log({ words });
     return words;
   } catch (e) {
     return [];

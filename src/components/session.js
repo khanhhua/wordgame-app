@@ -1,25 +1,37 @@
-import { openDB } from "idb";
+import { openDB } from 'idb';
 
-const DB_NAME = "WordGame";
-const TBL_SESSIONS = "sessions";
-const TBL_TERMS = "terms";
+const DB_NAME = 'WordGame';
+const TBL_SESSIONS = 'sessions';
+const TBL_TERMS = 'terms';
 let db = null;
 
 export const init = async () => {
   db = await openDB(DB_NAME, 4, {
     upgrade(db) {
       db.createObjectStore(TBL_SESSIONS, {
-        keyPath: "id",
+        keyPath: 'id',
       });
       db.createObjectStore(TBL_TERMS, {
-        keyPath: "id",
-      }).createIndex("index", "index");
+        keyPath: 'id',
+      }).createIndex('index', 'index');
     },
   });
 };
 
+export const renewSession = async () => {
+  let cursor = await db.transaction(TBL_TERMS, 'read').store.openCursor();
+  const terms = [];
+
+  while (cursor) {
+    terms.push(cursor.value);
+    cursor = await cursor.continue();
+  }
+
+  return createSession(terms);
+};
+
 export const createSession = async (terms) => {
-  const txSession = db.transaction(TBL_SESSIONS, "readwrite");
+  const txSession = db.transaction(TBL_SESSIONS, 'readwrite');
   const sessionId = Date.now().toString();
   await Promise.all([
     txSession.store.add({
@@ -32,7 +44,7 @@ export const createSession = async (terms) => {
     txSession.done,
   ]);
 
-  const tx = db.transaction(TBL_TERMS, "readwrite");
+  const tx = db.transaction(TBL_TERMS, 'readwrite');
   await tx.store.clear();
   await Promise.all(
     terms
@@ -59,7 +71,7 @@ export const getSession = async (sessionId) => {
 
 export const getNextTerm = async (sessionId) => {
   const storeSession = db
-    .transaction(TBL_SESSIONS, "readwrite")
+    .transaction(TBL_SESSIONS, 'readwrite')
     .objectStore(TBL_SESSIONS);
   const session = await storeSession.get(sessionId);
   const { nextWordIndex, count } = session;
@@ -71,7 +83,7 @@ export const getNextTerm = async (sessionId) => {
     nextWordIndex: nextWordIndex + 1 < count ? nextWordIndex + 1 : -1,
   });
 
-  const term = await db.getFromIndex(TBL_TERMS, "index", nextWordIndex);
+  const term = await db.getFromIndex(TBL_TERMS, 'index', nextWordIndex);
 
   return {
     term,
@@ -80,7 +92,7 @@ export const getNextTerm = async (sessionId) => {
 };
 
 export const updateStats = async (sessionId, entry) => {
-  const tx = db.transaction(TBL_SESSIONS, "readwrite");
+  const tx = db.transaction(TBL_SESSIONS, 'readwrite');
   const storeSession = tx.objectStore(TBL_SESSIONS);
   const session = await storeSession.get(sessionId);
   await storeSession.put({
@@ -107,15 +119,15 @@ export const getSessionStats = async (sessionId) => {
 
   const session = await db.get(TBL_SESSIONS, sessionId);
 
-  const stats = session.stats.reduce(
+  const stats = (session.stats || []).reduce(
     (acc, entry) => {
       const term = terms.find(({ word: key }) => key === entry.termId);
-      const gender = term.tags.includes("MAS")
-        ? "der"
-        : term.tags.includes("FEM")
-        ? "die"
-        : term.tags.includes("NEU")
-        ? "das"
+      const gender = term.tags.includes('MAS')
+        ? 'der'
+        : term.tags.includes('FEM')
+        ? 'die'
+        : term.tags.includes('NEU')
+        ? 'das'
         : null;
       if (!gender) {
         return acc;
