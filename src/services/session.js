@@ -1,11 +1,11 @@
-import {getDb} from './indexeddb';
+import { getDb } from './indexeddb';
 
 const TBL_SESSIONS = 'sessions';
 const TBL_TERMS = 'terms';
 
 export const renewSession = async () => {
   const db = await getDb();
-  let cursor = await db.transaction(TBL_TERMS, 'read').store.openCursor();
+  let cursor = await db.transaction(TBL_TERMS, 'readonly').store.openCursor();
   const terms = [];
 
   while (cursor) {
@@ -65,7 +65,10 @@ export const getNextTerm = async (sessionId) => {
   const session = await storeSession.get(sessionId);
   const { nextWordIndex, count } = session;
   if (nextWordIndex === -1) {
-    return null;
+    return {
+      term: null,
+      hasNext: false,
+    };
   }
   await storeSession.put({
     ...session,

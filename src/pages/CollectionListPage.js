@@ -4,8 +4,8 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from "react";
-import { useHistory } from "react-router-dom";
+} from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   Form,
@@ -16,11 +16,11 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from "reactstrap";
-import network from "../components/network";
-import { getCollections, getTermsByCollection } from "../components/github";
-import { createSession } from "../components/session";
-import { DispatchContext, StateContext } from "../components/context";
+} from 'reactstrap';
+import network from '../components/network';
+import { getCollections, getTermsByCollection } from '../services/github';
+import { createSession } from '../services/session';
+import { DispatchContext, StateContext } from '../components/context';
 import {
   ACTION_CREATE_COLLECTION,
   ACTION_LIST_COLLECTIONS,
@@ -28,27 +28,25 @@ import {
   STATUS_ERROR,
   STATUS_OK,
   STATUS_PENDING,
-} from "../components/constants";
-import CollectionList from "../components/CollectionList";
+} from '../components/constants';
+import CollectionList from '../components/CollectionList';
 
 export default (props) => {
   const dispatch = useContext(DispatchContext);
   const state = useContext(StateContext);
   const [newCollection, setNewCollection] = useState({
     visible: false,
-    name: "",
+    name: '',
   });
   const newCollectionNameRef = useRef();
   const history = useHistory();
 
   useEffect(() => {
     (async () => {
-      const {
-        ok,
-        collections,
-        myCollections,
-        error,
-      } = await getCollections().then((collections) => ({
+      const repoUrl = state.getIn(['repo', 'current', 'url']);
+      const { ok, collections, myCollections, error } = await getCollections(
+        repoUrl
+      ).then((collections) => ({
         collections,
         myCollections: [],
         ok: true,
@@ -58,7 +56,7 @@ export default (props) => {
       if (!ok) {
         if (error.status_code === 401) {
           localStorage.clear();
-          history.replace("/login", { expired: true });
+          history.replace('/login', { expired: true });
           return;
         }
 
@@ -79,19 +77,26 @@ export default (props) => {
     })();
   }, [dispatch]);
 
-  const onReviewClick = async (collection) => {
-    dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
-    const terms = await getTermsByCollection({ file: collection.get("file") }, 'noun');
-    const sessionId = await createSession(terms);
+  const onReviewClick = useCallback(
+    async (collection) => {
+      dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
+      const terms = await getTermsByCollection(
+        collection.get('repoUrl'),
+        collection.get('file'),
+        'noun'
+      );
+      const sessionId = await createSession(terms);
 
-    history.push(`/play/${sessionId}`);
-  };
+      history.push(`/play/${sessionId}`);
+    },
+    [dispatch]
+  );
 
   const onNewCollectionCreate = useCallback(async () => {
     const type = ACTION_CREATE_COLLECTION;
     dispatch({ type, status: STATUS_PENDING });
     const { ok, collection, error } = await network.post(
-      "/api/me/collections",
+      '/api/me/collections',
       {
         name: newCollectionNameRef.current.value,
       }
@@ -99,7 +104,7 @@ export default (props) => {
     if (!ok) {
       if (error.status_code === 401) {
         localStorage.clear();
-        history.replace("/login", { expired: true });
+        history.replace('/login', { expired: true });
         return;
       }
 
@@ -112,13 +117,13 @@ export default (props) => {
 
   const onEditClick = useCallback(
     async (collection) => {
-      history.push(`/collections/${collection.get("id")}`);
+      history.push(`/collections/${collection.get('id')}`);
     },
     [history]
   );
 
-  const collections = state.get("collections");
-  const myCollections = state.get("myCollections");
+  const collections = state.get('collections');
+  const myCollections = state.get('myCollections');
 
   return (
     <div className="container my-collection-list-page">

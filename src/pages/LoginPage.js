@@ -1,14 +1,14 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import GoogleLogin from "react-google-login";
-import { load } from "recaptcha-v3";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { Alert, Button } from "reactstrap";
-import { DispatchContext } from "../components/context";
-import { ACTION_LOGIN, STATUS_OK } from "../components/constants";
-import network from "../components/network";
-import {createSession} from "../components/session";
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import GoogleLogin from 'react-google-login';
+import { load } from 'recaptcha-v3';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Alert, Button } from 'reactstrap';
+import { DispatchContext } from '../components/context';
+import { ACTION_LOGIN, STATUS_OK } from '../components/constants';
+import network from '../components/network';
+import { createSession } from '../services/session';
 
-const CAPTCHA_CLIENT_KEY = "6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh";
+const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
 
 export default () => {
   const [recaptcha, setRecaptcha] = useState(null);
@@ -21,14 +21,14 @@ export default () => {
     async (response) => {
       const { accessToken: token, profileObj } = response;
 
-      localStorage.setItem("wg:profile", JSON.stringify(profileObj));
-      localStorage.setItem("wg:token", token);
+      localStorage.setItem('wg:profile', JSON.stringify(profileObj));
+      localStorage.setItem('wg:token', token);
       dispatch({
         type: ACTION_LOGIN,
         status: STATUS_OK,
         token,
       });
-      history.replace("/collections");
+      history.replace('/collections');
     },
     [dispatch, history]
   );
@@ -53,7 +53,7 @@ export default () => {
           className="mt-2 alert-float"
           isOpen={true}
           color="warning"
-          toggle={() => history.replace("/login")}
+          toggle={() => history.replace('/login')}
         >
           <h4 className="alert-heading">Your session has expired.</h4>
           <p className="mt-3 text-center text-sm-left">
@@ -65,17 +65,17 @@ export default () => {
         <div className="col">
           <h3
             style={{
-              marginTop: "50%",
+              marginTop: '50%',
             }}
           >
             Hallo Deutsch
           </h3>
           <GoogleLogin
             clientId={
-              "976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com"
+              '976856176051-ietkcknpua13udt2tucm8sbecik7h5rt.apps.googleusercontent.com'
             }
             onSuccess={onSuccess}
-            responseType={"token"}
+            responseType={'token'}
             isSignedIn={true}
           />
           <p className="text-muted">

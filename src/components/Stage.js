@@ -1,11 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-} from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { DispatchContext, StateContext } from '../components/context';
 import {
   ACTION_NEXT_WORD,
@@ -15,7 +10,7 @@ import {
   STATUS_PENDING,
 } from '../components/constants';
 import Loader from './Loader';
-import { getNextTerm, getSessionStats, updateStats } from './session';
+import { getNextTerm, getSessionStats, updateStats } from '../services/session';
 
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
@@ -32,13 +27,7 @@ export default ({ sessionId }) => {
     const { term, hasNext, error } = await getNextTerm(sessionId);
 
     if (!term) {
-      if (error.status_code === 401) {
-        localStorage.clear();
-        history.replace('/login', { expired: true });
-        return;
-      }
-
-      dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error });
+      dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error: new Error('Session expired') });
       return;
     }
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext });
