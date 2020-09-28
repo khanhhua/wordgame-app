@@ -1,11 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-} from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { DispatchContext, StateContext } from '../components/context';
 import {
   ACTION_NEXT_WORD,
@@ -15,7 +10,7 @@ import {
   STATUS_PENDING,
 } from '../components/constants';
 import Loader from './Loader';
-import { getNextTerm, getSessionStats, updateStats } from './session';
+import { getNextTerm, getSessionStats, updateStats } from '../services/session';
 
 export default ({ sessionId }) => {
   const dispatch = useContext(DispatchContext);
@@ -29,21 +24,30 @@ export default ({ sessionId }) => {
 
   const fetchNextWord = useCallback(async () => {
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_PENDING });
-    const { term, hasNext, error } = await getNextTerm(sessionId);
+    const { term, hasNext } = await getNextTerm(sessionId);
 
     if (!term) {
-      if (error.status_code === 401) {
-        localStorage.clear();
-        history.replace('/login', { expired: true });
-        return;
-      }
-
-      dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error });
+      dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error: new Error('Session expired') });
       return;
     }
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext });
     setTimestamp(Date.now() / 1000);
-  }, [dispatch, state, sessionId]);
+  }, [dispatch, sessionId]);
+
+  const showReport = useCallback(async () => {
+    setStatus({ busy: true });
+
+    const sessionId = state.getIn(['gameSession', 'id']);
+
+    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
+    const stats = await getSessionStats(sessionId);
+
+    dispatch({
+      type: ACTION_SHOW_REPORT,
+      status: STATUS_OK,
+      report: { session: stats },
+    });
+  }, [dispatch, state]);
 
   const onSelectAnswer = useCallback(
     async (answer) => {
@@ -82,27 +86,12 @@ export default ({ sessionId }) => {
         }
       }
     },
-    [dispatch, timestamp, state.getIn(['gameSession', 'term'])]
+    [fetchNextWord, history, sessionId, showReport, state, timestamp]
   );
-
-  const showReport = useCallback(async () => {
-    setStatus({ busy: true });
-
-    const sessionId = state.getIn(['gameSession', 'id']);
-
-    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
-    const stats = await getSessionStats(sessionId);
-
-    dispatch({
-      type: ACTION_SHOW_REPORT,
-      status: STATUS_OK,
-      report: { session: stats },
-    });
-  }, [dispatch, state.getIn(['gameSession', 'term'])]);
 
   const onSkipClick = useCallback(async () => {
     await fetchNextWord();
-  }, [dispatch, state.getIn(['gameSession', 'term'])]);
+  }, [fetchNextWord]);
 
   const onNextClick = useCallback(async () => {
     setShowingAnswer(null);
@@ -111,17 +100,13 @@ export default ({ sessionId }) => {
     } else {
       showReport();
     }
-  }, [
-    dispatch,
-    state.getIn(['gameSession', 'term']),
-    state.getIn(['gameSession', 'hasNext']),
-  ]);
+  }, [fetchNextWord, showReport, state]);
 
   useEffect(() => {
     (async () => {
       await fetchNextWord();
     })();
-  }, []);
+  }, [fetchNextWord]);
 
   const term = state.getIn(['gameSession', 'term']);
 

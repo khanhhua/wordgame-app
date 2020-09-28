@@ -80,7 +80,7 @@ export default () => {
         }
       }
     },
-    [collection]
+    [collection, collectionId, history]
   );
 
   const onNewTermSelected = useCallback(
@@ -115,7 +115,7 @@ export default () => {
         ],
       });
     },
-    [collection]
+    [collection, collectionId, dispatch, history]
   );
 
   const onTermRemoved = useCallback(
@@ -141,7 +141,7 @@ export default () => {
         [collection]
       );
     },
-    [collection]
+    [collection, collectionId, history]
   );
 
   useEffect(() => {
@@ -163,7 +163,7 @@ export default () => {
       setStatus({ busy: false });
       setCollection(_c);
     })();
-  }, [collectionId]);
+  }, [collectionId, history]);
 
   return (
     <Modal isOpen={true}>

@@ -1,13 +1,13 @@
-import React, { useReducer } from "react";
-import ReactDOM from "react-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import React, { useReducer } from 'react';
+import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
-import { DispatchContext, StateContext } from "./components/context";
-import reducer, { initialState } from "./components/reducer";
-import { init as initDb } from "./components/indexeddb";
+import { DispatchContext, StateContext } from './components/context';
+import reducer, { initialState } from './components/reducer';
+import { init as initDb } from './services/indexeddb';
 
 const Index = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -22,7 +22,7 @@ const Index = (props) => {
 };
 
 initDb().then(() => {
-  ReactDOM.render(<Index />, document.getElementById("root"));
+  ReactDOM.render(<Index />, document.getElementById('root'));
 });
 
 // If you want your app to work offline and load faster, you can change

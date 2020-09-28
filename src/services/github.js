@@ -1,4 +1,4 @@
-import api from './network';
+import api from '../components/network';
 
 async function content(url, parse) {
   const res = await api.request(url, 'GET');
@@ -16,19 +16,45 @@ async function content(url, parse) {
   return parsed;
 }
 
-export const getCollections = async () => {
-  const url =
-    'https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/package.json';
+const DEFAULT_REPO_URL = 'https://api.github.com/repos/khanhhua/wordgame-data';
+
+export const getRepoContents = async (repoUrl = DEFAULT_REPO_URL) => {
   try {
-    const json = await content(url, JSON.parse);
-    return json.collections;
+    const res = await api.request(`${repoUrl}/contents`, 'GET');
+    const contents = await res.json();
+    return Promise.all(
+      contents.map(async ({ _links: { self } }) => {
+        const url = self.replace('?ref=master', '');
+        const packageContent = await content(
+          `${url}/package.json`,
+          JSON.parse
+        );
+        return {
+          ...packageContent,
+          url,
+        };
+      })
+    );
   } catch (e) {
     return [];
   }
 };
 
-export const getTermsByCollection = async ({ file }, flag = null) => {
-  const url = `https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen/${file}`;
+export const getCollections = async (repoUrl) => {
+  const url = `${repoUrl}/package.json`;
+  try {
+    const json = await content(url, JSON.parse);
+    return json.collections.map((item) => ({
+      ...item,
+      repoUrl,
+    }));
+  } catch (e) {
+    return [];
+  }
+};
+
+export const getTermsByCollection = async (repoUrl, file, flag = null) => {
+  const url = `${repoUrl}/${file}`;
   try {
     const words = await content(url, (decoded) => {
       return decoded

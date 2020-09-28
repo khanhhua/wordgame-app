@@ -1,7 +1,9 @@
 import { fromJS } from 'immutable';
 import {
   ACTION_CREATE_COLLECTION,
+  ACTION_CHOOSE_COLLECTION,
   ACTION_LIST_COLLECTIONS,
+  ACTION_LIST_REPO_CONTENTS,
   ACTION_LOGIN,
   ACTION_LOGOUT,
   ACTION_NEXT_WORD,
@@ -21,6 +23,13 @@ export const initialState = fromJS({
   gameSession: {
     id: null,
     status: SESSION_STATUS_PENDING,
+  },
+  repo: {
+    contents: [],
+    current: {
+      url: 'https://api.github.com/repos/khanhhua/wordgame-data/contents/menschen',
+      name: 'Menschen',
+    },
   },
   collections: [],
   report: {},
@@ -62,10 +71,17 @@ export default (state, { type, status, ...action }) => {
         })
       );
     }
+    case ACTION_LIST_REPO_CONTENTS: {
+      return state.setIn(['repo', 'contents'], fromJS(action.contents));
+    }
     case ACTION_LIST_COLLECTIONS: {
       return state
         .set('collections', fromJS(action.collections))
         .set('myCollections', fromJS(action.myCollections));
+    }
+    case ACTION_CHOOSE_COLLECTION: {
+      return state
+          .setIn(['repo', 'current'], fromJS(action.collection));
     }
     case ACTION_CREATE_COLLECTION: {
       return state.updateIn(['myCollections'], (collections) =>
