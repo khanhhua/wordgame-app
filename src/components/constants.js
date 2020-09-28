@@ -14,3 +14,6 @@ export const ACTION_SHOW_REPORT = 'user/show-report';
 export const ACTION_LIST_COLLECTIONS = 'user/list-collections';
 export const ACTION_ADD_TO_COLLECTION = 'user/add-to-collections';
 export const ACTION_CREATE_COLLECTION = 'user/create-collection';
+
+export const ACTION_LIST_REPO_CONTENTS = 'repo/list-contents';
+export const ACTION_CHOOSE_COLLECTION = 'repo/choose-collection';
