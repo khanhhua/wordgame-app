@@ -3,11 +3,11 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+#on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
 
 jobs:
   build:
@@ -32,4 +32,4 @@ jobs:
       with:
         source: "build/*"
         target: "/home/webuser/wordgame-app"
-        strip_components: 1 
+        strip_components: 1
