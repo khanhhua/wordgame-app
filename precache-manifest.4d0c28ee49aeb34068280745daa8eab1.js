@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9e6968c285d2936f1fe5acb22a634ff8",
+    "revision": "36a1fef931e6fd47e2a7073f7a39148d",
     "url": "http://hallodeutsch.fatmandesigner.com/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "http://hallodeutsch.fatmandesigner.com/static/css/2.47e06e2e.chunk.css"
   },
   {
-    "revision": "8724e8b7aff94b01eca5",
+    "revision": "b34f68ebb30c3f3220bc",
     "url": "http://hallodeutsch.fatmandesigner.com/static/css/main.2a87ea66.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "http://hallodeutsch.fatmandesigner.com/static/js/2.2197da8a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "8724e8b7aff94b01eca5",
-    "url": "http://hallodeutsch.fatmandesigner.com/static/js/main.60c943a2.chunk.js"
+    "revision": "b34f68ebb30c3f3220bc",
+    "url": "http://hallodeutsch.fatmandesigner.com/static/js/main.29575eea.chunk.js"
   },
   {
     "revision": "4290d44d066ade5888ff",
