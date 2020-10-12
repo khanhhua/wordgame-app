@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader } from 'reactstrap';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import { Badge, Card, CardBody, CardHeader, Button } from 'reactstrap';
 import LineChartWeeklyPerformance from '../components/LineChartWeeklyPerformance';
 import BarChartHistogram from '../components/BarChartHistogram';
 import Loader from '../components/Loader';
 import { getLocalReports } from '../services/reporting';
+import { get } from '../services/settings';
+import {getCollections, getTermsByCollection} from '../services/github';
+import {ACTION_START_SESSION, STATUS_OK, STATUS_PENDING} from "../components/constants";
+import {createSession} from "../services/session";
+import {DispatchContext} from "../components/context";
+import {useHistory} from "react-router-dom";
 
 const bgClasses = {
   MAS: 'bg-masculine',
@@ -21,6 +26,8 @@ const classFromTags = (tags) => {
 };
 
 export default (props) => {
+  const dispatch = useContext(DispatchContext);
+  const history = useHistory();
   const [status, setStatus] = useState({ busy: false, error: null });
   const [report, setReport] = useState({
     worstPerformers: [],
@@ -45,6 +52,27 @@ export default (props) => {
     })();
   }, []);
 
+  const onReviewClick = useCallback(async () => {
+    const currentCollection = await get('repo.current');
+    const collections = await getCollections(currentCollection.url);
+    let allTerms = [];
+
+    for (const collection of collections) {
+      const _terms = await getTermsByCollection(collection.repoUrl, collection.file, 'NOUN');
+      allTerms = allTerms.concat(_terms);
+    }
+
+    const { worstPerformers } = await getLocalReports({});
+    const filteringKeys = worstPerformers.filter(({correct_factor}) => correct_factor < 0.7).map(({ word }) => word);
+    const terms = allTerms.filter(({ word }) => filteringKeys.includes(word))
+
+    console.log({terms});
+    dispatch({ type: ACTION_START_SESSION, status: STATUS_PENDING });
+    const sessionId = await createSession(terms);
+    history.push(`/play/${sessionId}`);
+    dispatch({ type: ACTION_START_SESSION, status: STATUS_OK });
+  }, []);
+
   return (
     <div className="container report-page">
       {!!status.busy && <Loader />}
@@ -54,6 +82,11 @@ export default (props) => {
 
           <Card>
             <CardHeader>
+              <Button
+                  color="primary"
+                  className="float-right"
+                  onClick={onReviewClick}
+              >Review</Button>
               <h5 className="mb-0">Needs improvements</h5>
             </CardHeader>
             <CardBody>

@@ -88,6 +88,7 @@ export default (props) => {
       const sessionId = await createSession(terms);
 
       history.push(`/play/${sessionId}`);
+      dispatch({ type: ACTION_START_SESSION, status: STATUS_OK });
     },
     [dispatch]
   );
