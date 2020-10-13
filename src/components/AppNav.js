@@ -11,7 +11,7 @@ export default () => {
   const onLogout = useCallback(() => {
     dispatch({ type: ACTION_LOGOUT });
     window.localStorage.clear();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Navbar light className="bg-light">

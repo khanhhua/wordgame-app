@@ -40,7 +40,7 @@ export default ({ term, addToCollection }) => {
       }
       dispatch({ type, status: STATUS_OK, collections });
     })();
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   return (
     <Modal isOpen={true}>

@@ -58,7 +58,7 @@ export default (props) => {
     let allTerms = [];
 
     for (const collection of collections) {
-      const _terms = await getTermsByCollection(collection.repoUrl, collection.file, 'NOUN');
+      const _terms = await getTermsByCollection(collection.repoUrl, collection.file, 'noun');
       allTerms = allTerms.concat(_terms);
     }
 
@@ -71,7 +71,7 @@ export default (props) => {
     const sessionId = await createSession(terms);
     history.push(`/play/${sessionId}`);
     dispatch({ type: ACTION_START_SESSION, status: STATUS_OK });
-  }, []);
+  }, [dispatch, history]);
 
   return (
     <div className="container report-page">
