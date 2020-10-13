@@ -5,7 +5,6 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Alert, Button } from 'reactstrap';
 import { DispatchContext } from '../components/context';
 import { ACTION_LOGIN, STATUS_OK } from '../components/constants';
-import network from '../components/network';
 import { createSession } from '../services/session';
 
 const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
@@ -36,7 +35,7 @@ export default () => {
     // const recaptchaToken = await recaptcha.execute("start_session");
     const sessionId = await createSession([]);
     history.replace(`/play/${sessionId}`);
-  }, [recaptcha]);
+  }, [history]);
 
   useEffect(() => {
     console.log(params);

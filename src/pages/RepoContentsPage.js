@@ -46,7 +46,7 @@ export default (props) => {
             history.replace('/collections');
           })
     },
-    [dispatch]
+    [dispatch, history]
   );
 
   const contents = state.getIn(['repo', 'contents']);

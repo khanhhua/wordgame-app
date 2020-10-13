@@ -1,22 +1,19 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { DispatchContext, StateContext } from '../components/context';
-import network from '../components/network';
 import {
   ACTION_LOGIN,
   ACTION_START_SESSION,
   SESSION_STATUS_DONE,
   SESSION_STATUS_PLAYING,
-  STATUS_ERROR,
   STATUS_OK,
-  STATUS_PENDING,
 } from '../components/constants';
 import Stage from '../components/Stage';
 import Report from '../components/Report';
 import GoogleLogin from 'react-google-login';
 import { Button } from 'reactstrap';
 import { load } from 'recaptcha-v3';
-import { createSession, getSession, renewSession } from '../services/session';
+import { getSession, renewSession } from '../services/session';
 
 const CAPTCHA_CLIENT_KEY = '6LfUb-EUAAAAAEBdxIpMqGCi2e7ScZ4I4eqVhzAh';
 
@@ -32,14 +29,14 @@ export default (props) => {
     const sessionId = await renewSession();
 
     history.replace(`/play/${sessionId}`);
-  }, [recaptcha]);
+  }, [history]);
 
   useEffect(() => {
     (async () => {
       const _recaptcha = await load(CAPTCHA_CLIENT_KEY);
       setRecaptcha(_recaptcha);
     })();
-  });
+  }, [dispatch]);
 
   useEffect(() => {
     (async () => {
@@ -54,7 +51,7 @@ export default (props) => {
         }
       }
     })();
-  }, [dispatch, pathParams.sessionId]);
+  }, [dispatch, history, pathParams.sessionId]);
 
   const onSuccess = useCallback(
     async (response) => {

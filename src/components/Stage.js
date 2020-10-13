@@ -19,12 +19,13 @@ export default ({ sessionId }) => {
 
   const [status, setStatus] = useState({ busy: false, error: null });
   const [showingAnswer, setShowingAnswer] = useState(null);
-
   const [timestamp, setTimestamp] = useState(null);
+
+  const term = state.getIn(['gameSession', 'term']);
 
   const fetchNextWord = useCallback(async () => {
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_PENDING });
-    const { term, hasNext, error } = await getNextTerm(sessionId);
+    const { term, hasNext } = await getNextTerm(sessionId);
 
     if (!term) {
       dispatch({ type: ACTION_NEXT_WORD, status: STATUS_ERROR, error: new Error('Session expired') });
@@ -32,7 +33,22 @@ export default ({ sessionId }) => {
     }
     dispatch({ type: ACTION_NEXT_WORD, status: STATUS_OK, term, hasNext });
     setTimestamp(Date.now() / 1000);
-  }, [dispatch, state, sessionId]);
+  }, [dispatch, sessionId]);
+
+  const showReport = useCallback(async () => {
+    setStatus({ busy: true });
+
+    const sessionId = state.getIn(['gameSession', 'id']);
+
+    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
+    const stats = await getSessionStats(sessionId);
+
+    dispatch({
+      type: ACTION_SHOW_REPORT,
+      status: STATUS_OK,
+      report: { session: stats },
+    });
+  }, [dispatch, state]);
 
   const onSelectAnswer = useCallback(
     async (answer) => {
@@ -71,27 +87,12 @@ export default ({ sessionId }) => {
         }
       }
     },
-    [dispatch, timestamp, state.getIn(['gameSession', 'term'])]
+    [fetchNextWord, history, sessionId, showReport, state, timestamp]
   );
-
-  const showReport = useCallback(async () => {
-    setStatus({ busy: true });
-
-    const sessionId = state.getIn(['gameSession', 'id']);
-
-    dispatch({ type: ACTION_SHOW_REPORT, status: STATUS_PENDING, sessionId });
-    const stats = await getSessionStats(sessionId);
-
-    dispatch({
-      type: ACTION_SHOW_REPORT,
-      status: STATUS_OK,
-      report: { session: stats },
-    });
-  }, [dispatch, state.getIn(['gameSession', 'term'])]);
 
   const onSkipClick = useCallback(async () => {
     await fetchNextWord();
-  }, [dispatch, state.getIn(['gameSession', 'term'])]);
+  }, [fetchNextWord]);
 
   const onNextClick = useCallback(async () => {
     setShowingAnswer(null);
@@ -100,19 +101,40 @@ export default ({ sessionId }) => {
     } else {
       showReport();
     }
-  }, [
-    dispatch,
-    state.getIn(['gameSession', 'term']),
-    state.getIn(['gameSession', 'hasNext']),
-  ]);
+  }, [fetchNextWord, showReport, state]);
 
   useEffect(() => {
     (async () => {
       await fetchNextWord();
     })();
-  }, []);
+  }, [fetchNextWord]);
 
-  const term = state.getIn(['gameSession', 'term']);
+  const onKeyPress = useCallback((e) => {
+    if (!term) {
+      return;
+    }
+
+    switch (String.fromCharCode(e.keyCode)) {
+      case 's':
+      case '3':
+        return onSelectAnswer('NEU');
+      case '2':
+      case 'e':
+        return onSelectAnswer('FEM');
+      case '1':
+      case 'r':
+        return onSelectAnswer('MAS');
+      default: break;
+    }
+  }, [onSelectAnswer, term]);
+
+  useEffect(() => {
+    window.addEventListener('keypress', onKeyPress);
+
+    return () => {
+      window.removeEventListener('keypress', onKeyPress);
+    };
+  }, [onKeyPress]);
 
   return (
     <section className="row">
@@ -131,25 +153,28 @@ export default ({ sessionId }) => {
             <div className="actions text-center">
               <div className="btn-group w-75">
                 <button
-                  className="btn btn-light btn-lg text-white btn-circle bg-masculine"
+                  className="btn btn-light btn-lg text-white btn-circle bg-masculine mr-1"
                   onClick={() => onSelectAnswer('MAS')}
                 >
                   Der
+                  <span className="btn-hinttext">1</span>
                 </button>
                 <button
-                  className="btn btn-light btn-lg text-white btn-circle bg-feminine"
+                  className="btn btn-light btn-lg text-white btn-circle bg-feminine mr-1"
                   onClick={() => onSelectAnswer('FEM')}
                 >
                   Die
+                  <span className="btn-hinttext">2</span>
                 </button>
                 <button
                   className="btn btn-light btn-lg text-white btn-circle bg-neuter"
                   onClick={() => onSelectAnswer('NEU')}
                 >
                   Das
+                  <span className="btn-hinttext">3</span>
                 </button>
               </div>
-              <div className="btn-group w-100 mt-5">
+              <div className="btn-group w-50 mt-5">
                 <button
                   className="btn btn-primary btn-sm"
                   onClick={onSkipClick}

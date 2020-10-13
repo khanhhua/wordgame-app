@@ -75,7 +75,7 @@ export default (props) => {
         myCollections,
       });
     })();
-  }, [dispatch]);
+  }, [dispatch, history, state]);
 
   const onReviewClick = useCallback(
     async (collection) => {
@@ -90,7 +90,7 @@ export default (props) => {
       history.push(`/play/${sessionId}`);
       dispatch({ type: ACTION_START_SESSION, status: STATUS_OK });
     },
-    [dispatch]
+    [dispatch, history]
   );
 
   const onNewCollectionCreate = useCallback(async () => {
@@ -114,7 +114,7 @@ export default (props) => {
 
     dispatch({ type, status: STATUS_OK, collection });
     setNewCollection({ visible: false });
-  }, [dispatch, newCollectionNameRef]);
+  }, [dispatch, history]);
 
   const onEditClick = useCallback(
     async (collection) => {
