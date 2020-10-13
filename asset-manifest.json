@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "http://hallodeutsch.fatmandesigner.com/static/css/main.2a87ea66.chunk.css",
-    "main.js": "http://hallodeutsch.fatmandesigner.com/static/js/main.29575eea.chunk.js",
-    "main.js.map": "http://hallodeutsch.fatmandesigner.com/static/js/main.29575eea.chunk.js.map",
+    "main.css": "http://hallodeutsch.fatmandesigner.com/static/css/main.09b853c3.chunk.css",
+    "main.js": "http://hallodeutsch.fatmandesigner.com/static/js/main.68944de7.chunk.js",
+    "main.js.map": "http://hallodeutsch.fatmandesigner.com/static/js/main.68944de7.chunk.js.map",
     "runtime-main.js": "http://hallodeutsch.fatmandesigner.com/static/js/runtime-main.beb9dcd5.js",
     "runtime-main.js.map": "http://hallodeutsch.fatmandesigner.com/static/js/runtime-main.beb9dcd5.js.map",
     "static/css/2.47e06e2e.chunk.css": "http://hallodeutsch.fatmandesigner.com/static/css/2.47e06e2e.chunk.css",
-    "static/js/2.2197da8a.chunk.js": "http://hallodeutsch.fatmandesigner.com/static/js/2.2197da8a.chunk.js",
-    "static/js/2.2197da8a.chunk.js.map": "http://hallodeutsch.fatmandesigner.com/static/js/2.2197da8a.chunk.js.map",
+    "static/js/2.cf9320ac.chunk.js": "http://hallodeutsch.fatmandesigner.com/static/js/2.cf9320ac.chunk.js",
+    "static/js/2.cf9320ac.chunk.js.map": "http://hallodeutsch.fatmandesigner.com/static/js/2.cf9320ac.chunk.js.map",
     "index.html": "http://hallodeutsch.fatmandesigner.com/index.html",
-    "precache-manifest.4d0c28ee49aeb34068280745daa8eab1.js": "http://hallodeutsch.fatmandesigner.com/precache-manifest.4d0c28ee49aeb34068280745daa8eab1.js",
+    "precache-manifest.2242e7725ffc4e59f80d59f393f77250.js": "http://hallodeutsch.fatmandesigner.com/precache-manifest.2242e7725ffc4e59f80d59f393f77250.js",
     "service-worker.js": "http://hallodeutsch.fatmandesigner.com/service-worker.js",
     "static/css/2.47e06e2e.chunk.css.map": "http://hallodeutsch.fatmandesigner.com/static/css/2.47e06e2e.chunk.css.map",
-    "static/css/main.2a87ea66.chunk.css.map": "http://hallodeutsch.fatmandesigner.com/static/css/main.2a87ea66.chunk.css.map",
-    "static/js/2.2197da8a.chunk.js.LICENSE.txt": "http://hallodeutsch.fatmandesigner.com/static/js/2.2197da8a.chunk.js.LICENSE.txt"
+    "static/css/main.09b853c3.chunk.css.map": "http://hallodeutsch.fatmandesigner.com/static/css/main.09b853c3.chunk.css.map",
+    "static/js/2.cf9320ac.chunk.js.LICENSE.txt": "http://hallodeutsch.fatmandesigner.com/static/js/2.cf9320ac.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.beb9dcd5.js",
     "static/css/2.47e06e2e.chunk.css",
-    "static/js/2.2197da8a.chunk.js",
-    "static/css/main.2a87ea66.chunk.css",
-    "static/js/main.29575eea.chunk.js"
+    "static/js/2.cf9320ac.chunk.js",
+    "static/css/main.09b853c3.chunk.css",
+    "static/js/main.68944de7.chunk.js"
   ]
 }
